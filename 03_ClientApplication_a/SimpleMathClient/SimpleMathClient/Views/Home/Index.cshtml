@@ -1,0 +1,20 @@
+﻿@model SimpleMathClient.ViewModels.HomeViewModel
+@{
+    ViewBag.Title = "Home - SimpleMathClient_a";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Calling a WCF service to get the sum of 2 numbers </h2>
+
+Note: the WCF service currently has a on-purpose bug where the summation is 1 less than it should be
+<br />
+<br />
+
+
+Input 1 is @Model.InputA
+<br />
+<br />
+Input 2 is @Model.InputB
+<br />
+<br />
+The sume of Input 1 and Input 2 is @Model.Result
