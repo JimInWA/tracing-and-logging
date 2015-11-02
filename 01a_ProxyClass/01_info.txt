@@ -1,0 +1,8 @@
+- Browse to the service and add the ?singleWSdl
+
+- Copy the whole URL
+
+- Open VS2013 Command Prompt
+
+- Type in:
+	svcutil http://localhost:13048/AdditionOperations.svc /out:AdditionOperationsProxy.cs /language:CS
