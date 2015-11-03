@@ -1,0 +1,54 @@
+Based on:
+- http://westdiscgolf.blogspot.co.uk/2012/09/debugging-wcf-messages-before.html
+- https://github.com/WestDiscGolf/WcfMessageDebugging
+
+Web.config file in SimpleMathService (WCF service) was modified just enough to allow the hooks:
+- system.serviceModel
+	- behaviors
+		- new endpointBehaviors section (this includes the debugDispatcher which is part of the extension section listed below)
+	- new bindings section (this has the binding name used in the services section listed below)
+	- new services section (this includes behaviorConfiguration, which seems to be the hook to the new endpointBehavior section)
+	- new extension section (this includes the debugDispatcher listed in the endpointBehaviors section above)
+
+In the SoapRequestAndResponseTracing project, set breakpoints on all of the methods and properties
+
+Set the SimpleMathService project as the start up project
+
+Set the AdditionOperatioins.svc as the start page
+
+Press F5 to start up the WCF Test Client
+
+Based on the breakpoints, here is the flow in the SoapRequestAndResponseTracing project:
+
+1. DebugMessageBehaviorElement
+- BehaviorType property, get
+- BehaviorType property, get
+- BehaviorType property, get
+- BehaviorType property, get
+- CreateBehavior method
+
+2. DebugMessageBehavior
+- Validate method (no code in method currently)
+- AddBindingParameters (no code in method currently)
+- ApplyDispatchBehavior (adds the message inspector)
+- AddBindingParameters (no code in method currently)
+
+3. WCF Test Client comes up
+
+4. Select AddTwoNumbers method
+
+5. enter values into WCF Test Client
+
+6. Click Invoke
+
+7. DebugMessageDispatcher
+- AfterReceiveRequest method (only returns request right now)
+
+8. SimpleMathService
+- Service1
+	- AddTwoNumbers method
+
+9. DebugMessageDispatcher
+- BeforeSendReply method (no code in method currently)
+
+10. WCF Test Client shows the result
