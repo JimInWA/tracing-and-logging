@@ -47,6 +47,8 @@
     <Compile Include="DebugMessageDispatcher.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Interfaces\ILogger.cs" />
+    <Compile Include="Logger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

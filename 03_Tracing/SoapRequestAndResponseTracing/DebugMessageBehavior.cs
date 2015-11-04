@@ -1,9 +1,9 @@
-﻿using System.ServiceModel.Channels;
-using System.ServiceModel.Description;
-using System.ServiceModel.Dispatcher;
-
-namespace SoapRequestAndResponseTracing
+﻿namespace SoapRequestAndResponseTracing
 {
+    using System.ServiceModel.Channels;
+    using System.ServiceModel.Description;
+    using System.ServiceModel.Dispatcher;
+
     public class DebugMessageBehavior : IEndpointBehavior
     {
         public void AddBindingParameters(ServiceEndpoint endpoint, BindingParameterCollection bindingParameters)

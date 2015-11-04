@@ -45,7 +45,7 @@ Based on the breakpoints, here is the flow in the SoapRequestAndResponseTracing 
 - AfterReceiveRequest method (only returns request right now)
 
 8. SimpleMathService
-- Service1
+- AdditionOperations
 	- AddTwoNumbers method
 
 9. DebugMessageDispatcher

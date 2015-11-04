@@ -1,1 +1,1 @@
-﻿<%@ ServiceHost Language="C#" Debug="true" Service="SimpleMathService.Service1" CodeBehind="AdditionOperations.svc.cs" %>
+﻿<%@ ServiceHost Language="C#" Debug="true" Service="SimpleMathService.AdditionOperations" CodeBehind="AdditionOperations.svc.cs" %>

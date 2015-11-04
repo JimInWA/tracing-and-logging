@@ -1,8 +1,8 @@
-﻿using System;
-using System.ServiceModel.Configuration;
-
-namespace SoapRequestAndResponseTracing
+﻿namespace SoapRequestAndResponseTracing
 {
+    using System;
+    using System.ServiceModel.Configuration;
+
     public class DebugMessageBehaviorElement : BehaviorExtensionElement
     {
         protected override object CreateBehavior()

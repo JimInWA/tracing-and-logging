@@ -1,14 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.ServiceModel;
-using System.ServiceModel.Web;
-using System.Text;
-
-namespace SimpleMathService
+﻿namespace SimpleMathService
 {
-    public class Service1 : IAdditionOperations
+    public class AdditionOperations : IAdditionOperations
     {
         public int AddTwoNumbers(int valueA, int valueB)
         {
