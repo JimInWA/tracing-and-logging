@@ -5,6 +5,6 @@
 
     public interface ILogger
     {
-        void Log(Message message);
+        Message Log(Message message);
     }
 }
