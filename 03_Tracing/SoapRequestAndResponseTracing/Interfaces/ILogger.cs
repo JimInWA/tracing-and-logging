@@ -5,6 +5,6 @@
 
     public interface ILogger
     {
-        Message Log(Message message);
+        Message Log(string sourceType, string stepName, Message message);
     }
 }

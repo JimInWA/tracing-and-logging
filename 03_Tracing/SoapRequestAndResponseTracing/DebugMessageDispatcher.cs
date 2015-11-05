@@ -16,7 +16,8 @@
             if (ShouldLogSoapRequestsAndResponses())
             {
                 var myLogger = new Logger();
-                request = myLogger.Log(request);
+                // ToDo: Get rid of the magic strings
+                request = myLogger.Log("WCF Server Side", "incoming request", request);
             }
 
             return request;
@@ -27,7 +28,8 @@
             if (ShouldLogSoapRequestsAndResponses())
             {
                 var myLogger = new Logger();
-                reply = myLogger.Log(reply);
+                // ToDo: Get rid of the magic strings
+                reply = myLogger.Log("WCF Server Side", "outgoing reply", reply);
             }
         }
 
@@ -35,6 +37,7 @@
         {
             var shouldLogSoapRequestsAndResponses = false;
 
+            // ToDo: Get rid of the magic strings
             var configSetting = ConfigurationManager.AppSettings["ShouldLogSoapRequestsAndResponses"];
             if (!string.IsNullOrWhiteSpace(configSetting))
             {

@@ -28,27 +28,59 @@ Based on the breakpoints, here is the flow in the SoapRequestAndResponseTracing 
 - CreateBehavior method
 
 2. DebugMessageBehavior
-- Validate method (no code in method currently)
-- AddBindingParameters (no code in method currently)
-- ApplyDispatchBehavior (adds the message inspector)
-- AddBindingParameters (no code in method currently)
+- Validate method
+	- no code in method currently
+
+- AddBindingParameters
+	- no code in method currently
+
+- ApplyDispatchBehavior
+	- adds the inspector for the WCF services, DebugMessageDispatcher
+
+- AddBindingParameters
+	no code in method currently
 
 3. WCF Test Client comes up
 
-4. Select AddTwoNumbers method
+4. Select AddTwoNumbers method in the CustomBinding section
 
-5. enter values into WCF Test Client
+5. Enter values into WCF Test Client
 
 6. Click Invoke
 
 7. DebugMessageDispatcher
-- AfterReceiveRequest method (only returns request right now)
+- AfterReceiveRequest method
+	- Determines if it should log the request
+	- If so
+		- Creates new Logger instance
+		- Calls Log method to log the request
 
-8. SimpleMathService
+8. Logger
+- Log method
+	- Reads the message into an XML Document
+	- Since this is WCF request, logs the message to the C:\Temp\WCF_Server_Side_Log_File.log
+	- Rebuilds the message from the XML Document
+	- Returns the message back to the caller
+
+9. DebugMessageDispatcher
+- AfterReceiveRequest method
+	- If logging the request, the request is passed to the WCF Service
+
+10. SimpleMathService
 - AdditionOperations
 	- AddTwoNumbers method
 
-9. DebugMessageDispatcher
-- BeforeSendReply method (no code in method currently)
+11. DebugMessageDispatcher
+- BeforeSendReply method
+	- Determines if it should log the request
+	- If so
+		- Creates new Logger instance
+		- Calls Log method to log the request
 
-10. WCF Test Client shows the result
+12. Logger
+- Log method
+	- Same as above
+
+13. WCF Test Client shows the result
+
+14. You can repeat for the AddTwoNumbers method in the BasicHttpBidning section
