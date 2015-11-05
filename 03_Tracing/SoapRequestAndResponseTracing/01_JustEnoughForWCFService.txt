@@ -1,6 +1,13 @@
+Notes:
+- SimpleMathService is using .NET 4.5 Framework
+- SoapRequestAndResponseTracing is using to .NET 4.0 Framework
+	- This is to simulate a current situtation at work where our WCF service layer is 4.5 but our MVC application is 4.0
+
 Based on:
 - http://westdiscgolf.blogspot.co.uk/2012/09/debugging-wcf-messages-before.html
 - https://github.com/WestDiscGolf/WcfMessageDebugging
+- http://www.codemeit.com/wcf/wcf-restful-pox-json-and-soap-coexist.html
+- http://weblogs.asp.net/paolopia/writing-a-wcf-message-inspector
 
 Web.config file in SimpleMathService (WCF service) was modified just enough to allow the hooks:
 - system.serviceModel
