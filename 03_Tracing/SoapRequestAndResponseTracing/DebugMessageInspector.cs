@@ -4,9 +4,9 @@
     using System.ServiceModel.Channels;
     using System.ServiceModel.Dispatcher;
 
-    public class DebugMessageDispatcher : IDispatchMessageInspector
+    public class DebugMessageInspector : IClientMessageInspector
     {
-        public object AfterReceiveRequest(ref Message request, IClientChannel channel, InstanceContext instanceContext)
+        public object BeforeSendRequest(ref Message request, IClientChannel channel)
         {
             var myHelper = new Helper();
 
@@ -14,13 +14,13 @@
             {
                 var myLogger = new Logger();
                 // ToDo: Get rid of the magic strings
-                request = myLogger.Log("WCF Server Side", "incoming request", request);
+                request = myLogger.Log("MVC Client Side", "outgoing request", request);
             }
 
             return request;
         }
 
-        public void BeforeSendReply(ref Message reply, object correlationState)
+        public void AfterReceiveReply(ref Message reply, object correlationState)
         {
             var myHelper = new Helper();
 
@@ -28,9 +28,8 @@
             {
                 var myLogger = new Logger();
                 // ToDo: Get rid of the magic strings
-                reply = myLogger.Log("WCF Server Side", "outgoing reply", reply);
+                reply = myLogger.Log("MVC Client Side", "incoming reply", reply);
             }
         }
     }
-
 }

@@ -11,10 +11,16 @@
     {
         public Message Log(string sourceType, string stepName, Message message)
         {
-            var absoluteUri = string.Empty;
+            var uri = string.Empty;
             if (message.Headers.To != null)
             {
-                absoluteUri = message.Headers.To.AbsoluteUri;
+                // Server side, incoming request
+                uri = message.Headers.To.AbsoluteUri;
+            }
+            else if (message.Headers.Action != null)
+            {
+                // Client side, outgoing request
+                uri = message.Headers.Action;
             }
             
             // read the message into an XmlDocument as then you can work with the contents 
@@ -25,7 +31,7 @@
             // read the contents of the message here and update as required; eg sign the message
 
             // Log the contents of xmlDoc
-            LogToFile(sourceType, stepName, absoluteUri, myXmlDocument);
+            LogToFile(sourceType, stepName, uri, myXmlDocument);
 
             // as the message is forward reading then we need to recreate it before moving on 
             message = RebuildMessageFromXmlDocument(myXmlDocument, myMessageVersion);
@@ -49,7 +55,7 @@
             return myXmlDocument;
         }
 
-        private void LogToFile(string sourceType, string stepName, string absoluteUri, XmlDocument xmlDocument)
+        private void LogToFile(string sourceType, string stepName, string uri, XmlDocument xmlDocument)
         {
             // ToDo: Get rid of the magic strings
             var folderName = @"c:\Temp";
@@ -65,6 +71,10 @@
             {
                 case "WCF Server Side":
                     fileName = "WCF_Server_Side_Log_File.log";
+                    break;
+
+                case "MVC Client Side":
+                    fileName = "MVC_Client_Side_Log_File.log";
                     break;
 
                 default:
@@ -88,9 +98,9 @@
             {
                 var headerLine = new StringBuilder();
                 headerLine.AppendFormat("(UTC) {0} {1} - {2} - {3}", DateTime.UtcNow.ToLongDateString(), DateTime.UtcNow.ToLongTimeString(), sourceType, stepName);
-                if (!string.IsNullOrWhiteSpace(absoluteUri))
+                if (!string.IsNullOrWhiteSpace(uri))
                 {
-                    headerLine.AppendFormat(" - {0}", absoluteUri);
+                    headerLine.AppendFormat(" - {0}", uri);
                 }
                 fileAppender.WriteLine("{0}", headerLine);
                 fileAppender.WriteLine("{0}", xmlDocument.InnerXml);

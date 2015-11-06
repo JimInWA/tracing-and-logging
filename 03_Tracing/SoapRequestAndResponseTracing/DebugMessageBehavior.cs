@@ -12,6 +12,8 @@
 
         public void ApplyClientBehavior(ServiceEndpoint endpoint, ClientRuntime clientRuntime)
         {
+            // add the inspector to the client runtime
+            clientRuntime.MessageInspectors.Add(new DebugMessageInspector());
         }
 
         public void ApplyDispatchBehavior(ServiceEndpoint endpoint, EndpointDispatcher endpointDispatcher)

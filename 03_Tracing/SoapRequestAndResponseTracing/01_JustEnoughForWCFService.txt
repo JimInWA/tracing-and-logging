@@ -1,6 +1,7 @@
 Notes:
 - SimpleMathService is using .NET 4.5 Framework
 - SoapRequestAndResponseTracing is using to .NET 4.0 Framework
+- SimpleMathClient is using .NET 4.0 Framework
 	- This is to simulate a current situtation at work where our WCF service layer is 4.5 but our MVC application is 4.0
 
 Based on:
@@ -9,7 +10,9 @@ Based on:
 - http://www.codemeit.com/wcf/wcf-restful-pox-json-and-soap-coexist.html
 - http://weblogs.asp.net/paolopia/writing-a-wcf-message-inspector
 
-Web.config file in SimpleMathService (WCF service) was modified just enough to allow the hooks:
+Web.config file in SimpleMathService (WCF service) was modified:
+- appSettings
+	- Added ShouldLogSoapRequestsAndResponses
 - system.serviceModel
 	- behaviors
 		- new endpointBehaviors section (this includes the debugDispatcher which is part of the extension section listed below)
@@ -44,7 +47,7 @@ Based on the breakpoints, here is the flow in the SoapRequestAndResponseTracing 
 - ApplyDispatchBehavior
 	- adds the inspector for the WCF services, DebugMessageDispatcher
 
-- AddBindingParameters
+- AddBindingParameters (2nd time)
 	no code in method currently
 
 3. WCF Test Client comes up

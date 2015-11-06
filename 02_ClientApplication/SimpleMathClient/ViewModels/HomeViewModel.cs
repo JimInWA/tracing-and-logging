@@ -16,9 +16,9 @@ namespace SimpleMathClient.ViewModels
             InputA = inputA;
             InputB = inputB;
 
-            var additioinOperationProxy = new AdditionOperationsClient();
+            var additionOperationProxy = new AdditionOperationsClient();
 
-            Result = additioinOperationProxy.AddTwoNumbers(inputA, inputB);
+            Result = additionOperationProxy.AddTwoNumbers(inputA, inputB);
         }
     }
 }

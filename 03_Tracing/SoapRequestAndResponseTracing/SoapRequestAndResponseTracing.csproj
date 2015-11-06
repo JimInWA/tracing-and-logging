@@ -47,12 +47,16 @@
     <Compile Include="DebugMessageDispatcher.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DebugMessageInspector.cs" />
+    <Compile Include="Helper.cs" />
+    <Compile Include="Interfaces\IHelper.cs" />
     <Compile Include="Interfaces\ILogger.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="01_JustEnoughForWCFService.txt" />
+    <Content Include="02_JustEnoughForMVCApplication.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

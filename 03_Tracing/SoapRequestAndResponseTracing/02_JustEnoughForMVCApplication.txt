@@ -1,0 +1,48 @@
+﻿Notes:
+- SimpleMathService is using .NET 4.5 Framework
+- SoapRequestAndResponseTracing is using to .NET 4.0 Framework
+- SimpleMathClient is using .NET 4.0 Framework
+	- This is to simulate a current situtation at work where our WCF service layer is 4.5 but our MVC application is 4.0
+
+Based on:
+- http://westdiscgolf.blogspot.co.uk/2012/09/debugging-wcf-messages-before.html
+- https://github.com/WestDiscGolf/WcfMessageDebugging
+- http://www.codemeit.com/wcf/wcf-restful-pox-json-and-soap-coexist.html
+- http://weblogs.asp.net/paolopia/writing-a-wcf-message-inspector
+
+Web.config file in SimpleMathClient (ASP.NET MVC Applicaiton)  was modified:
+- appSettings
+	- Added ShouldLogSoapRequestsAndResponses
+- system.serviceModel
+	- bindings
+		- Added customBinding
+	- behaviors
+		- new endpointBehaviors section (this includes the debugInspector which is part of the extension section listed below)
+	- client
+		- updated the data (this includes behaviorConfiguration, which seems to be the hook to the new endpointBehavior section)
+	- new extension section (this includes the debugInspector listed in the endpointBehaviors section above)
+
+
+In a different instance of VS2013, start the SimpleMathService
+
+In the SoapRequestAndResponseTracing project, set breakpoints in DebugMessageBehavior class on all of the methods
+
+Set the SimpleMathClient project as the start up project
+
+Press F5 to start up the SimpleMathClient
+
+Based on the breakpoints, here is the flow in the SoapRequestAndResponseTracing project:
+
+1. DebugMessageBehavior
+- Validate method
+	- no code in method currently
+
+- AddBindingParameters
+	- no code in method currently
+
+- ApplyClientBehavior
+	- adds the inspector for the WCF clients, DebugMessageInspector
+
+2. The MVC Application starts up
+
+3. 
