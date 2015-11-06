@@ -7,9 +7,20 @@
     using System.Text;
     using System.Xml;
 
+    /// <summary>
+    /// Logger class - implements ILogger interface
+    /// Methods for logging the request and response
+    /// </summary>
     public class Logger : ILogger
     {
-        public Message Log(string sourceType, string stepName, Message message)
+        /// <summary>
+        /// Log method - orchestrates the logging of the request or response
+        /// </summary>
+        /// <param name="sourceType"></param>
+        /// <param name="stepName"></param>
+        /// <param name="message"></param>
+        /// <returns></returns>
+        public Message Log(string sourceType, StringBuilder stepName, Message message)
         {
             var uri = string.Empty;
             if (message.Headers.To != null)
@@ -55,7 +66,7 @@
             return myXmlDocument;
         }
 
-        private void LogToFile(string sourceType, string stepName, string uri, XmlDocument xmlDocument)
+        private void LogToFile(string sourceType, StringBuilder stepName, string uri, XmlDocument xmlDocument)
         {
             // ToDo: Get rid of the magic strings
             var folderName = @"c:\Temp";

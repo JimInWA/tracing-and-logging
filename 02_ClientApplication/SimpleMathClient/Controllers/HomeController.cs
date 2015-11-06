@@ -1,18 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-
-using SimpleMathClient.ViewModels;
-
-namespace SimpleMathClient.Controllers
+﻿namespace SimpleMathClient.Controllers
 {
+    using SimpleMathClient.ViewModels;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web;
+    using System.Web.Mvc;
+
+    /// <summary>
+    /// HomeController class - extends Controller class 
+    /// </summary>
     public class HomeController : Controller
     {
         //
         // GET: /Home/
 
+        /// <summary>
+        /// Index method
+        /// </summary>
+        /// <returns></returns>
         public ActionResult Index()
         {
             var model = new HomeViewModel();
