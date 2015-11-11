@@ -20,7 +20,7 @@
         /// <param name="stepName"></param>
         /// <param name="message"></param>
         /// <returns></returns>
-        public Message Log(string sourceType, StringBuilder stepName, Message message)
+        public void Log(string sourceType, StringBuilder stepName, Message message)
         {
             var uri = string.Empty;
             if (message.Headers.To != null)
@@ -37,17 +37,8 @@
             // read the message into an XmlDocument as then you can work with the contents 
             var myXmlDocument = ReadMessageIntoXmlDocument(message);
 
-            var myMessageVersion = message.Version;
-
-            // read the contents of the message here and update as required; eg sign the message
-
             // Log the contents of xmlDoc
             LogToFile(sourceType, stepName, uri, myXmlDocument);
-
-            // as the message is forward reading then we need to recreate it before moving on 
-            message = RebuildMessageFromXmlDocument(myXmlDocument, myMessageVersion);
-
-            return message;
         }
 
         private XmlDocument ReadMessageIntoXmlDocument(Message message)
@@ -68,71 +59,64 @@
 
         private void LogToFile(string sourceType, StringBuilder stepName, string uri, XmlDocument xmlDocument)
         {
-            // ToDo: Get rid of the magic strings
-            var folderName = @"c:\Temp";
-            if (!Directory.Exists(folderName))
+            try
             {
-                Directory.CreateDirectory(folderName);
-            }
-
-            var fileName = string.Empty;
-            
-            // ToDo: Get rid of the magic strings
-            switch (sourceType)
-            {
-                case "WCF Server Side":
-                    fileName = "WCF_Server_Side_Log_File.log";
-                    break;
-
-                case "MVC Client Side":
-                    fileName = "MVC_Client_Side_Log_File.log";
-                    break;
-
-                default:
-                    fileName = "Unknown_Log_File.log";
-                    break;
-            }
-
-            var pathString = Path.Combine(folderName, fileName);
-
-            if (!System.IO.File.Exists(pathString))
-            {
-                using (var myFile = File.Create(pathString))
+                // ToDo: Get rid of the magic strings
+                var folderName = @"c:\Temp";
+                if (!Directory.Exists(folderName))
                 {
-                    // putting the using statement to close the file after creation
-                    // this is to avoid the "The process cannot access the file '[my file path here]' because it is being used by another process." error 
-                } 
-                
-            }
-
-            using (System.IO.StreamWriter fileAppender = File.AppendText(pathString))
-            {
-                var headerLine = new StringBuilder();
-                headerLine.AppendFormat("(UTC) {0} {1} - {2} - {3}", DateTime.UtcNow.ToLongDateString(), DateTime.UtcNow.ToLongTimeString(), sourceType, stepName);
-                if (!string.IsNullOrWhiteSpace(uri))
-                {
-                    headerLine.AppendFormat(" - {0}", uri);
+                    Directory.CreateDirectory(folderName);
                 }
-                fileAppender.WriteLine("{0}", headerLine);
-                fileAppender.WriteLine("{0}", xmlDocument.InnerXml);
-                fileAppender.WriteLine("");
-                fileAppender.WriteLine("");
+
+                var fileName = string.Empty;
+
+                // ToDo: Get rid of the magic strings
+                switch (sourceType)
+                {
+                    case "WCF Server Side":
+                        fileName = "WCF_Server_Side_Log_File.log";
+                        break;
+
+                    case "MVC Client Side":
+                        fileName = "MVC_Client_Side_Log_File.log";
+                        break;
+
+                    default:
+                        fileName = "Unknown_Log_File.log";
+                        break;
+                }
+
+                var pathString = Path.Combine(folderName, fileName);
+
+                if (!System.IO.File.Exists(pathString))
+                {
+                    using (var myFile = File.Create(pathString))
+                    {
+                        // putting the using statement to close the file after creation
+                        // this is to avoid the "The process cannot access the file '[my file path here]' because it is being used by another process." error 
+                    }
+
+                }
+
+                using (var fileAppender = File.AppendText(pathString))
+                {
+                    var headerLine = new StringBuilder();
+                    headerLine.AppendFormat("(UTC) {0} {1} - {2} - {3}", DateTime.UtcNow.ToLongDateString(),
+                        DateTime.UtcNow.ToLongTimeString(), sourceType, stepName);
+                    if (!string.IsNullOrWhiteSpace(uri))
+                    {
+                        headerLine.AppendFormat(" - {0}", uri);
+                    }
+                    fileAppender.WriteLine("{0}", headerLine);
+                    fileAppender.WriteLine("{0}", xmlDocument.InnerXml);
+                    fileAppender.WriteLine("");
+                    fileAppender.WriteLine("");
+                }
             }
-        }
-
-        private Message RebuildMessageFromXmlDocument(XmlDocument xmlDocument, MessageVersion myMessageVersion)
-        {
-            // as the message is forward reading then we need to recreate it before moving on 
-            var myMemoryStream = new MemoryStream();
-            var myXmlWriter = XmlWriter.Create(myMemoryStream);
-            myMemoryStream = new MemoryStream();
-            xmlDocument.Save(myMemoryStream);
-            myMemoryStream.Position = 0;
-            var reader = XmlReader.Create(myMemoryStream);
-            var message = Message.CreateMessage(reader, int.MaxValue, myMessageVersion);
-            message.Properties.CopyProperties(message.Properties);
-
-            return message;
+            catch
+            {
+                // empty catch block for right now
+            }
         }
     }
 }

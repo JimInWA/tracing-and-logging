@@ -17,6 +17,6 @@
         /// <param name="stepName"></param>
         /// <param name="message"></param>
         /// <returns></returns>
-        Message Log(string sourceType, StringBuilder stepName, Message message);
+        void Log(string sourceType, StringBuilder stepName, Message message);
     }
 }

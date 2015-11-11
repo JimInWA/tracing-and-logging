@@ -1,4 +1,7 @@
-﻿namespace SoapRequestAndResponseTracing
+﻿using System;
+using System.Threading.Tasks;
+
+namespace SoapRequestAndResponseTracing
 {
     using System.ServiceModel;
     using System.ServiceModel.Channels;
@@ -20,25 +23,43 @@
         /// <returns></returns>
         public object AfterReceiveRequest(ref Message request, IClientChannel channel, InstanceContext instanceContext)
         {
+            var requestBuffer = request.CreateBufferedCopy(Int32.MaxValue);
+            var requestCopyForLogging = requestBuffer.CreateMessage();
+            request = requestBuffer.CreateMessage();
+
+            // Since this is .NET 4.0, cannot use Task.Run
+            // Using Task.Factory.StartNew instead
+            Task.Factory.StartNew(() => StartLoggingTheRequest(requestCopyForLogging));
+
+            return request;
+        }
+
+        /// <summary>
+        /// StartLoggingTheRequest method
+        /// Used to start the process of logging with a copy of the request Message object 
+        /// Exposed a public method to allow for consumption by other behavior extensions
+        /// </summary>
+        /// <param name="requestCopyForLogging"></param>
+        public void StartLoggingTheRequest(Message requestCopyForLogging)
+        {
             var myHelper = new Helper();
 
             if (myHelper.ShouldLogSoapRequestsAndResponses())
             {
                 var myLogger = new Logger();
-                
+
                 // ToDo: Get rid of the magic strings
                 var incomingRequestText = new StringBuilder();
                 incomingRequestText.Append("incoming request");
 
-                if (request.Headers.MessageId != null)
+                if (requestCopyForLogging.Headers.MessageId != null)
                 {
-                    incomingRequestText.AppendFormat(" ({0})", myHelper.StripFormattingFromHeaderMessageId(request.Headers.MessageId.ToString()));
+                    incomingRequestText.AppendFormat(" ({0})",
+                        myHelper.StripFormattingFromHeaderMessageId(requestCopyForLogging.Headers.MessageId.ToString()));
                 }
-                
-                request = myLogger.Log("WCF Server Side", incomingRequestText, request);
-            }
 
-            return request;
+                myLogger.Log("WCF Server Side", incomingRequestText, requestCopyForLogging);
+            }
         }
 
         /// <summary>
@@ -48,6 +69,23 @@
         /// <param name="reply"></param>
         /// <param name="correlationState"></param>
         public void BeforeSendReply(ref Message reply, object correlationState)
+        {
+            var replyBuffer = reply.CreateBufferedCopy(Int32.MaxValue);
+            var replyCopyForLogging = replyBuffer.CreateMessage();
+            reply = replyBuffer.CreateMessage();
+
+            // Since this is .NET 4.0, cannot use Task.Run
+            // Using Task.Factory.StartNew instead
+            Task.Factory.StartNew(() => StartLoggingTheReply(replyCopyForLogging));
+        }
+
+        /// <summary>
+        /// StartLoggingTheReply method
+        /// Used to start the process of logging with a copy of the reply Message object 
+        /// Exposed a public method to allow for consumption by other behavior extensions
+        /// </summary>
+        /// <param name="replyCopyForLogging"></param>
+        public void StartLoggingTheReply(Message replyCopyForLogging)
         {
             var myHelper = new Helper();
 
@@ -59,12 +97,13 @@
                 var outgoingReplyText = new StringBuilder();
                 outgoingReplyText.Append("outgoing reply");
 
-                if (reply.Headers.RelatesTo != null)
+                if (replyCopyForLogging.Headers.RelatesTo != null)
                 {
-                    outgoingReplyText.AppendFormat(" ({0})", myHelper.StripFormattingFromHeaderRelatesTo(reply.Headers.RelatesTo.ToString()));
+                    outgoingReplyText.AppendFormat(" ({0})",
+                        myHelper.StripFormattingFromHeaderRelatesTo(replyCopyForLogging.Headers.RelatesTo.ToString()));
                 }
 
-                reply = myLogger.Log("WCF Server Side", outgoingReplyText, reply);
+                myLogger.Log("WCF Server Side", outgoingReplyText, replyCopyForLogging);
             }
         }
     }
