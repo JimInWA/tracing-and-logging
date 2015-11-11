@@ -4,10 +4,10 @@
     using System.Configuration;
 
     /// <summary>
-    /// Helper class - implements IHelper interface
+    /// Helper class (internal) - implements IHelper interface
     /// General utility methods to reduce code duplication
     /// </summary>
-    public class Helper : IHelper
+    internal class Helper : IHelper
     {
         /// <summary>
         /// ShouldLogSoapRequestsAndResponses method - reads the config to determine if we should log or not

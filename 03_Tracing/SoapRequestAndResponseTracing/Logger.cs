@@ -8,10 +8,10 @@
     using System.Xml;
 
     /// <summary>
-    /// Logger class - implements ILogger interface
+    /// Logger class (internal) - implements ILogger interface
     /// Methods for logging the request and response
     /// </summary>
-    public class Logger : ILogger
+    internal class Logger : ILogger
     {
         /// <summary>
         /// Log method - orchestrates the logging of the request or response
