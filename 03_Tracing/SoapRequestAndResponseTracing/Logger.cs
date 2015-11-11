@@ -1,4 +1,6 @@
-﻿namespace SoapRequestAndResponseTracing
+﻿using System.Configuration;
+
+namespace SoapRequestAndResponseTracing
 {
     using SoapRequestAndResponseTracing.Interfaces;
     using System;
@@ -66,6 +68,13 @@
                 if (!Directory.Exists(folderName))
                 {
                     Directory.CreateDirectory(folderName);
+                }
+
+                // ToDo: Get rid of the magic strings
+                var configSetting = ConfigurationManager.AppSettings["SoapRequestsAndResponsesFolder"];
+                if (!string.IsNullOrWhiteSpace(configSetting))
+                {
+                    folderName = configSetting;
                 }
 
                 var fileName = string.Empty;
