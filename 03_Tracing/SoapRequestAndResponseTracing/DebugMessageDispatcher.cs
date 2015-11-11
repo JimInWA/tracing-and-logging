@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using SoapRequestAndResponseTracing.Interfaces;
 
 namespace SoapRequestAndResponseTracing
 {
@@ -13,6 +14,18 @@ namespace SoapRequestAndResponseTracing
     /// </summary>
     public class DebugMessageDispatcher : IDispatchMessageInspector
     {
+        private readonly IHelper _helper;
+        private readonly ILogger _logger;
+
+        /// <summary>
+        /// DebugMessageDispatcher constructor
+        /// </summary>
+        public DebugMessageDispatcher()
+        {
+            _helper = new Helper();
+            _logger = new Logger();
+        }
+
         /// <summary>
         /// AfterReceiveRequest method
         /// When a service call is being traced and logged, this is called after the client has sent the request but before the request is processed by the service
@@ -42,12 +55,8 @@ namespace SoapRequestAndResponseTracing
         /// <param name="requestCopyForLogging"></param>
         public void StartLoggingTheRequest(Message requestCopyForLogging)
         {
-            var myHelper = new Helper();
-
-            if (myHelper.ShouldLogSoapRequestsAndResponses())
+            if (_helper.ShouldLogSoapRequestsAndResponses())
             {
-                var myLogger = new Logger();
-
                 // ToDo: Get rid of the magic strings
                 var incomingRequestText = new StringBuilder();
                 incomingRequestText.Append("incoming request");
@@ -55,10 +64,10 @@ namespace SoapRequestAndResponseTracing
                 if (requestCopyForLogging.Headers.MessageId != null)
                 {
                     incomingRequestText.AppendFormat(" ({0})",
-                        myHelper.StripFormattingFromHeaderMessageId(requestCopyForLogging.Headers.MessageId.ToString()));
+                        _helper.StripFormattingFromHeaderMessageId(requestCopyForLogging.Headers.MessageId.ToString()));
                 }
 
-                myLogger.Log("WCF Server Side", incomingRequestText, requestCopyForLogging);
+                _logger.Log("WCF Server Side", incomingRequestText, requestCopyForLogging);
             }
         }
 
@@ -87,12 +96,8 @@ namespace SoapRequestAndResponseTracing
         /// <param name="replyCopyForLogging"></param>
         public void StartLoggingTheReply(Message replyCopyForLogging)
         {
-            var myHelper = new Helper();
-
-            if (myHelper.ShouldLogSoapRequestsAndResponses())
+            if (_helper.ShouldLogSoapRequestsAndResponses())
             {
-                var myLogger = new Logger();
-
                 // ToDo: Get rid of the magic strings
                 var outgoingReplyText = new StringBuilder();
                 outgoingReplyText.Append("outgoing reply");
@@ -100,10 +105,10 @@ namespace SoapRequestAndResponseTracing
                 if (replyCopyForLogging.Headers.RelatesTo != null)
                 {
                     outgoingReplyText.AppendFormat(" ({0})",
-                        myHelper.StripFormattingFromHeaderRelatesTo(replyCopyForLogging.Headers.RelatesTo.ToString()));
+                        _helper.StripFormattingFromHeaderRelatesTo(replyCopyForLogging.Headers.RelatesTo.ToString()));
                 }
 
-                myLogger.Log("WCF Server Side", outgoingReplyText, replyCopyForLogging);
+                _logger.Log("WCF Server Side", outgoingReplyText, replyCopyForLogging);
             }
         }
     }

@@ -1,4 +1,6 @@
-﻿namespace SoapRequestAndResponseTracing
+﻿using SoapRequestAndResponseTracing.Interfaces;
+
+namespace SoapRequestAndResponseTracing
 {
     using System;
     using System.ServiceModel;
@@ -12,6 +14,18 @@
     /// </summary>
     public class DebugMessageInspector : IClientMessageInspector
     {
+        private readonly IHelper _helper;
+        private readonly ILogger _logger;
+
+        /// <summary>
+        /// DebugMessageInspector constructor
+        /// </summary>
+        public DebugMessageInspector()
+        {
+            _helper = new Helper();
+            _logger = new Logger();
+        }
+
         /// <summary>
         /// BeforeSendRequest method
         /// When a client call to a web service is being traced and logged, this is called after the client has sent the request but before the request is processed by the service
@@ -40,12 +54,8 @@
         /// <param name="requestCopyForLogging"></param>
         public void StartLoggingTheRequest(Message requestCopyForLogging)
         {
-            var myHelper = new Helper();
-
-            if (myHelper.ShouldLogSoapRequestsAndResponses())
+            if (_helper.ShouldLogSoapRequestsAndResponses())
             {
-                var myLogger = new Logger();
-
                 // ToDo: Get rid of the magic strings
                 var outgoingRequestText = new StringBuilder();
                 outgoingRequestText.Append("outgoing request");
@@ -53,10 +63,10 @@
                 if (requestCopyForLogging.Headers.MessageId != null)
                 {
                     outgoingRequestText.AppendFormat(" ({0})",
-                        myHelper.StripFormattingFromHeaderRelatesTo(requestCopyForLogging.Headers.MessageId.ToString()));
+                        _helper.StripFormattingFromHeaderRelatesTo(requestCopyForLogging.Headers.MessageId.ToString()));
                 }
 
-                myLogger.Log("MVC Client Side", outgoingRequestText, requestCopyForLogging);
+                _logger.Log("MVC Client Side", outgoingRequestText, requestCopyForLogging);
             }
         }
 
@@ -85,12 +95,8 @@
         /// <param name="replyCopyForLogging"></param>
         public void StartLoggingTheReply(Message replyCopyForLogging)
         {
-            var myHelper = new Helper();
-
-            if (myHelper.ShouldLogSoapRequestsAndResponses())
+            if (_helper.ShouldLogSoapRequestsAndResponses())
             {
-                var myLogger = new Logger();
-
                 // ToDo: Get rid of the magic strings
                 var incomingReplyText = new StringBuilder();
                 incomingReplyText.Append("incoming reply");
@@ -98,10 +104,10 @@
                 if (replyCopyForLogging.Headers.RelatesTo != null)
                 {
                     incomingReplyText.AppendFormat(" ({0})",
-                        myHelper.StripFormattingFromHeaderMessageId(replyCopyForLogging.Headers.RelatesTo.ToString()));
+                        _helper.StripFormattingFromHeaderMessageId(replyCopyForLogging.Headers.RelatesTo.ToString()));
                 }
 
-                myLogger.Log("MVC Client Side", incomingReplyText, replyCopyForLogging);
+                _logger.Log("MVC Client Side", incomingReplyText, replyCopyForLogging);
             }
         }
     }

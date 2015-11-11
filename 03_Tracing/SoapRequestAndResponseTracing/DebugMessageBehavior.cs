@@ -9,6 +9,18 @@
     /// </summary>
     public class DebugMessageBehavior : IEndpointBehavior
     {
+        private readonly IClientMessageInspector _clientMessageInspector;
+        private readonly IDispatchMessageInspector _debugMessageDispatcher;
+        
+        /// <summary>
+        /// DebugMessageBehavior constructor
+        /// </summary>
+        public DebugMessageBehavior()
+        {
+            _clientMessageInspector = new DebugMessageInspector();
+            _debugMessageDispatcher = new DebugMessageDispatcher();
+        }
+
         /// <summary>
         /// AddBindingParameters method
         /// Note: not used in this example, but needs to be defined to implement the interface
@@ -28,7 +40,7 @@
         public void ApplyClientBehavior(ServiceEndpoint endpoint, ClientRuntime clientRuntime)
         {
             // add the inspector to the client runtime
-            clientRuntime.MessageInspectors.Add(new DebugMessageInspector());
+            clientRuntime.MessageInspectors.Add(_clientMessageInspector);
         }
 
         /// <summary>
@@ -39,7 +51,7 @@
         /// <param name="endpointDispatcher"></param>
         public void ApplyDispatchBehavior(ServiceEndpoint endpoint, EndpointDispatcher endpointDispatcher)
         {
-            endpointDispatcher.DispatchRuntime.MessageInspectors.Add(new DebugMessageDispatcher());
+            endpointDispatcher.DispatchRuntime.MessageInspectors.Add(_debugMessageDispatcher);
         }
 
         /// <summary>
