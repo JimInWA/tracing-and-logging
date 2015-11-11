@@ -1,23 +1,14 @@
-﻿using System.Reflection;
-using System.Web.Compilation;
-using Autofac;
-
-namespace SimpleMathClient
+﻿namespace SimpleMathService.App_Code
 {
-    using System;
-    using System.Collections.Generic;
+    using Autofac;
     using System.Linq;
-    using System.Web;
-    using System.Web.Http;
-    using System.Web.Mvc;
-    using System.Web.Routing;
+    using System.Reflection;
+    using System.Web.Compilation;
 
-    // Note: For instructions on enabling IIS6 or IIS7 classic mode, 
-    // visit http://go.microsoft.com/?LinkId=9394801
     /// <summary>
-    /// MvcApplication class - extends System.Web.HttpApplication class
+    /// AppStart class - configure and register Autofac IoC container to run in application start.
     /// </summary>
-    public class MvcApplication : System.Web.HttpApplication
+    public class AppStart
     {
         /// <summary>
         /// Gets or sets the container reference.
@@ -28,16 +19,10 @@ namespace SimpleMathClient
         public static IContainer ContainerReference { get; private set; }
 
         /// <summary>
-        /// Application_Start method
+        /// AppInitialize method - register the Autofac IoC Container
         /// </summary>
-        protected void Application_Start()
+        public static void AppInitialize()
         {
-            AreaRegistration.RegisterAllAreas();
-
-            WebApiConfig.Register(GlobalConfiguration.Configuration);
-            FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
-            RouteConfig.RegisterRoutes(RouteTable.Routes);
-
             var assemblies = BuildManager.GetReferencedAssemblies().Cast<Assembly>().ToArray();
 
             // configure Autofac
