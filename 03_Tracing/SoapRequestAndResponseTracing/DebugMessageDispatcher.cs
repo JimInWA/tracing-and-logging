@@ -1,13 +1,12 @@
-﻿using System;
-using System.Threading.Tasks;
-using SoapRequestAndResponseTracing.Interfaces;
-
-namespace SoapRequestAndResponseTracing
+﻿namespace SoapRequestAndResponseTracing
 {
+    using System;
     using System.ServiceModel;
     using System.ServiceModel.Channels;
     using System.ServiceModel.Dispatcher;
     using System.Text;
+    using System.Threading.Tasks;
+    using SoapRequestAndResponseTracing.Interfaces;
 
     /// <summary>
     /// DebugMessageDispatcher class - implements IDispatchMessageInspector interface
@@ -20,10 +19,10 @@ namespace SoapRequestAndResponseTracing
         /// <summary>
         /// DebugMessageDispatcher constructor
         /// </summary>
-        public DebugMessageDispatcher()
+        public DebugMessageDispatcher(IHelper helper, ILogger logger)
         {
-            _helper = new Helper();
-            _logger = new Logger();
+            _helper = helper;
+            _logger = logger;
         }
 
         /// <summary>

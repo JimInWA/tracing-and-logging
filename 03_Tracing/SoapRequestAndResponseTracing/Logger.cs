@@ -10,10 +10,10 @@ namespace SoapRequestAndResponseTracing
     using System.Xml;
 
     /// <summary>
-    /// Logger class (internal) - implements ILogger interface
+    /// Logger class - implements ILogger interface
     /// Methods for logging the request and response
     /// </summary>
-    internal class Logger : ILogger
+    public class Logger : ILogger
     {
         /// <summary>
         /// Log method - orchestrates the logging of the request or response

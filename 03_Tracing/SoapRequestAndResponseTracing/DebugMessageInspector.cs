@@ -1,6 +1,4 @@
-﻿using SoapRequestAndResponseTracing.Interfaces;
-
-namespace SoapRequestAndResponseTracing
+﻿namespace SoapRequestAndResponseTracing
 {
     using System;
     using System.ServiceModel;
@@ -8,6 +6,7 @@ namespace SoapRequestAndResponseTracing
     using System.ServiceModel.Dispatcher;
     using System.Text;
     using System.Threading.Tasks;
+    using SoapRequestAndResponseTracing.Interfaces;
 
     /// <summary>
     /// DebugMessageInspector class - implements IClientMessageInspector interface
@@ -20,10 +19,10 @@ namespace SoapRequestAndResponseTracing
         /// <summary>
         /// DebugMessageInspector constructor
         /// </summary>
-        public DebugMessageInspector()
+        public DebugMessageInspector(IHelper helper, ILogger logger)
         {
-            _helper = new Helper();
-            _logger = new Logger();
+            _helper = helper;
+            _logger = logger;
         }
 
         /// <summary>

@@ -5,10 +5,10 @@
     using System.Text;
 
     /// <summary>
-    /// ILogger interface (internal)
+    /// ILogger interface
     /// Methods for logging the request and response
     /// </summary>
-    internal interface ILogger
+    public interface ILogger
     {
         /// <summary>
         /// Log method - orchestrates the logging of the request or response

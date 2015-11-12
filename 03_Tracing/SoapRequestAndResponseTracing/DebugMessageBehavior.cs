@@ -15,10 +15,10 @@
         /// <summary>
         /// DebugMessageBehavior constructor
         /// </summary>
-        public DebugMessageBehavior()
+        public DebugMessageBehavior(IClientMessageInspector clientMessageInspector, IDispatchMessageInspector debugMessageDispatcher)
         {
-            _clientMessageInspector = new DebugMessageInspector();
-            _debugMessageDispatcher = new DebugMessageDispatcher();
+            _clientMessageInspector = clientMessageInspector;
+            _debugMessageDispatcher = debugMessageDispatcher;
         }
 
         /// <summary>

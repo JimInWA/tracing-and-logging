@@ -6,10 +6,10 @@ using System.Text;
 namespace SoapRequestAndResponseTracing.Interfaces
 {
     /// <summary>
-    /// IHelper interface (internal)
+    /// IHelper interface
     /// General utility methods to reduce code duplication
     /// </summary>
-    internal interface IHelper
+    public interface IHelper
     {
         /// <summary>
         /// ShouldLogSoapRequestsAndResponses method - reads the config to determine if we should log or not
