@@ -4,7 +4,6 @@
     using System.ServiceModel;
     using System.ServiceModel.Channels;
     using System.ServiceModel.Dispatcher;
-    using System.Text;
     using System.Threading.Tasks;
     using SoapRequestAndResponseTracing.Interfaces;
 
@@ -57,16 +56,24 @@
             if (_helper.ShouldLogSoapRequestsAndResponses())
             {
                 // ToDo: Get rid of the magic strings
-                var incomingRequestText = new StringBuilder();
-                incomingRequestText.Append("incoming request");
+                const string incomingRequestText = "incoming request";
+
+                Guid urn;
 
                 if (requestCopyForLogging.Headers.MessageId != null)
+                { 
+                    var possibleUrn = _helper.StripFormattingFromHeaderMessageId(requestCopyForLogging.Headers.MessageId.ToString());
+                    if (!Guid.TryParseExact(possibleUrn, "D", out urn))
+                    {
+                        urn = new Guid();
+                    }
+                }
+                else
                 {
-                    incomingRequestText.AppendFormat(" ({0})",
-                        _helper.StripFormattingFromHeaderMessageId(requestCopyForLogging.Headers.MessageId.ToString()));
+                    urn = new Guid();                    
                 }
 
-                _logger.Log("WCF Server Side", incomingRequestText, requestCopyForLogging);
+                _logger.Log("WCF Server Side", incomingRequestText, urn, requestCopyForLogging);
             }
         }
 
@@ -98,16 +105,25 @@
             if (_helper.ShouldLogSoapRequestsAndResponses())
             {
                 // ToDo: Get rid of the magic strings
-                var outgoingReplyText = new StringBuilder();
-                outgoingReplyText.Append("outgoing reply");
+                const string outgoingReplyText = "outgoing reply";
+
+                Guid urn;
 
                 if (replyCopyForLogging.Headers.RelatesTo != null)
                 {
-                    outgoingReplyText.AppendFormat(" ({0})",
-                        _helper.StripFormattingFromHeaderRelatesTo(replyCopyForLogging.Headers.RelatesTo.ToString()));
+                    var possibleUrn = _helper.StripFormattingFromHeaderMessageId(replyCopyForLogging.Headers.RelatesTo.ToString());
+
+                    if (!Guid.TryParseExact(possibleUrn, "D", out urn))
+                    {
+                        urn = new Guid();
+                    }
+                }
+                else
+                {
+                    urn = new Guid();
                 }
 
-                _logger.Log("WCF Server Side", outgoingReplyText, replyCopyForLogging);
+                _logger.Log("WCF Server Side", outgoingReplyText, urn, replyCopyForLogging);
             }
         }
     }

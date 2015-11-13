@@ -1,8 +1,7 @@
 ﻿namespace SoapRequestAndResponseTracing.Interfaces
 {
-    using System.ServiceModel;
+    using System;
     using System.ServiceModel.Channels;
-    using System.Text;
 
     /// <summary>
     /// ILogger interface
@@ -15,8 +14,9 @@
         /// </summary>
         /// <param name="sourceType"></param>
         /// <param name="stepName"></param>
+        /// <param name="urnUuid"></param>
         /// <param name="message"></param>
         /// <returns></returns>
-        void Log(string sourceType, StringBuilder stepName, Message message);
+        void Log(string sourceType, string stepName, Guid urnUuid, Message message);
     }
 }

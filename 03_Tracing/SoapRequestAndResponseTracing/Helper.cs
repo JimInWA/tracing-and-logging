@@ -18,7 +18,7 @@
             var shouldLogSoapRequestsAndResponses = false;
 
             // ToDo: Get rid of the magic strings
-            var configSetting = ConfigurationManager.AppSettings["ShouldLogSoapRequestsAndResponses"];
+            var configSetting = ConfigurationManager.AppSettings["SoapRequestsAndResponsesShouldLog"];
             if (!string.IsNullOrWhiteSpace(configSetting))
             {
                 bool.TryParse(configSetting, out shouldLogSoapRequestsAndResponses);
@@ -51,7 +51,7 @@
 
         private string StripFormattingFromHeaderFields(string headerField)
         {
-            var result = headerField.Replace(":", " ").Replace("-", "");
+            var result = headerField.Replace(":", " ").Replace("urn uuid ", "");
             return result;
         }
     }

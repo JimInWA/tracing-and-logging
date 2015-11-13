@@ -12,7 +12,7 @@ Based on:
 
 Web.config file in SimpleMathClient (ASP.NET MVC Applicaiton)  was modified:
 - appSettings
-	- Added ShouldLogSoapRequestsAndResponses
+	- Added SoapRequestsAndResponsesShouldLog
 - system.serviceModel
 	- bindings
 		- Added customBinding

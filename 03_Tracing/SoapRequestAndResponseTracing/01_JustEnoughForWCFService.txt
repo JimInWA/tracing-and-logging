@@ -12,7 +12,7 @@ Based on:
 
 Web.config file in SimpleMathService (WCF service) was modified:
 - appSettings
-	- Added ShouldLogSoapRequestsAndResponses
+	- Added SoapRequestsAndResponsesShouldLog
 - system.serviceModel
 	- behaviors
 		- new endpointBehaviors section (this includes the debugDispatcher which is part of the extension section listed below)

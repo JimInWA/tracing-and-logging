@@ -1,13 +1,15 @@
-﻿using System.Configuration;
-
-namespace SoapRequestAndResponseTracing
+﻿namespace SoapRequestAndResponseTracing
 {
-    using SoapRequestAndResponseTracing.Interfaces;
     using System;
+    using System.Configuration;
+    using System.Data;
+    using System.Data.SqlClient;
     using System.IO;
     using System.ServiceModel.Channels;
     using System.Text;
     using System.Xml;
+    using SoapRequestAndResponseTracing.Interfaces;
+
 
     /// <summary>
     /// Logger class - implements ILogger interface
@@ -20,9 +22,10 @@ namespace SoapRequestAndResponseTracing
         /// </summary>
         /// <param name="sourceType"></param>
         /// <param name="stepName"></param>
+        /// <param name="urnUuid"></param>
         /// <param name="message"></param>
         /// <returns></returns>
-        public void Log(string sourceType, StringBuilder stepName, Message message)
+        public void Log(string sourceType, string stepName, Guid urnUuid, Message message)
         {
             var uri = string.Empty;
             if (message.Headers.To != null)
@@ -39,8 +42,8 @@ namespace SoapRequestAndResponseTracing
             // read the message into an XmlDocument as then you can work with the contents 
             var myXmlDocument = ReadMessageIntoXmlDocument(message);
 
-            // Log the contents of xmlDoc
-            LogToFile(sourceType, stepName, uri, myXmlDocument);
+            // Log the contents of xmlDoc to the database
+            LogToDatabase(sourceType, stepName, urnUuid, uri, myXmlDocument);
         }
 
         private XmlDocument ReadMessageIntoXmlDocument(Message message)
@@ -59,7 +62,7 @@ namespace SoapRequestAndResponseTracing
             return myXmlDocument;
         }
 
-        private void LogToFile(string sourceType, StringBuilder stepName, string uri, XmlDocument xmlDocument)
+        private void LogToFile(string sourceType, string stepName, Guid urnUuid, string uri, XmlDocument xmlDocument)
         {
             try
             {
@@ -110,8 +113,8 @@ namespace SoapRequestAndResponseTracing
                 using (var fileAppender = File.AppendText(pathString))
                 {
                     var headerLine = new StringBuilder();
-                    headerLine.AppendFormat("(UTC) {0} {1} - {2} - {3}", DateTime.UtcNow.ToLongDateString(),
-                        DateTime.UtcNow.ToLongTimeString(), sourceType, stepName);
+                    headerLine.AppendFormat("(UTC) {0} {1} - {2} - {3} - {4}", DateTime.UtcNow.ToLongDateString(),
+                        DateTime.UtcNow.ToLongTimeString(), sourceType, stepName, urnUuid);
                     if (!string.IsNullOrWhiteSpace(uri))
                     {
                         headerLine.AppendFormat(" - {0}", uri);
@@ -125,6 +128,80 @@ namespace SoapRequestAndResponseTracing
             catch
             {
                 // empty catch block for right now
+
+                // ToDo: Log the issue to the event log
+            }
+        }
+
+        private void LogToDatabase(string sourceType, string stepName, Guid urnUuid, string uri, XmlDocument xmlDocument)
+        {
+            try
+            {
+                // ToDo: Get rid of the magic strings
+                var applicationName = "Unknown";
+
+                // ToDo: Get rid of the magic strings
+                var configSetting = ConfigurationManager.AppSettings["SoapRequestsAndResponsesApplicationName"];
+                if (!string.IsNullOrWhiteSpace(configSetting))
+                {
+                    applicationName = configSetting;
+                }
+
+                // ToDo: Get rid of the magic strings
+                var connection = ConfigurationManager.ConnectionStrings["SampleLoggingConnectionString"];
+
+                using (var conn = new SqlConnection(connection.ConnectionString))
+                {
+                    var isRequest = false;
+                    var isReply = false;
+
+                    var comparisonText = stepName.ToString().ToLower();
+
+                    if (comparisonText.Contains("request"))
+                    {
+                        isRequest = true;
+                    }
+                    else if (comparisonText.Contains("reply"))
+                    {
+                        isReply = true;
+                    }
+
+                    const string insertAndScopeIdentityStatement = "insert into dbo.SoapRequestAndResponseTracingBase (CreatedDateTimeUtc, ApplicationName, IsRequest, IsReply, URN_UUID, URL, SoapRequestOrResponseXml) values (@CreatedDateTimeUtc, @ApplicationName, @IsRequest, @IsReply, @URN_UUID, @URL, @SoapRequestOrResponseXml);SELECT CAST(scope_identity() AS bigint)";
+
+                    var paramCreatedDateTimeUtc = new SqlParameter("CreatedDateTimeUtc", DateTime.UtcNow );
+                    var paramApplicationName = new SqlParameter("ApplicationName", applicationName);
+                    var paramIsRequest = new SqlParameter("IsRequest", isRequest);
+                    var paramIsReply = new SqlParameter("IsReply", isReply);
+                    var paramUrnUuid = new SqlParameter("URN_UUID", urnUuid);
+                    var paramUrl = new SqlParameter("URL", uri);
+                    var paramSoapRequestOrResponseXml = new SqlParameter("SoapRequestOrResponseXml", xmlDocument.InnerXml);
+
+                    var command = new SqlCommand(insertAndScopeIdentityStatement, conn)
+                    {
+                        CommandType = CommandType.Text
+                    };
+
+                    command.Parameters.Add(paramCreatedDateTimeUtc);
+                    command.Parameters.Add(paramApplicationName);
+                    command.Parameters.Add(paramIsRequest);
+                    command.Parameters.Add(paramIsReply);
+                    command.Parameters.Add(paramUrnUuid);
+                    command.Parameters.Add(paramUrl);
+                    command.Parameters.Add(paramSoapRequestOrResponseXml);
+
+                    conn.Open();
+
+                    // ExecuteScalar is returning a value due to the command having a select statement after the insert statement
+                    var result = (long)command.ExecuteScalar();
+                }            
+            }
+            catch (Exception ex)
+            {
+                var message = ex.Message;
+                // When an exception happens, log to the file
+                LogToFile(sourceType, stepName, urnUuid, uri, xmlDocument);
+
+                // ToDo: Log the issue to the event log
             }
         }
     }

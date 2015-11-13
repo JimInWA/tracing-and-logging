@@ -4,7 +4,6 @@
     using System.ServiceModel;
     using System.ServiceModel.Channels;
     using System.ServiceModel.Dispatcher;
-    using System.Text;
     using System.Threading.Tasks;
     using SoapRequestAndResponseTracing.Interfaces;
 
@@ -56,16 +55,24 @@
             if (_helper.ShouldLogSoapRequestsAndResponses())
             {
                 // ToDo: Get rid of the magic strings
-                var outgoingRequestText = new StringBuilder();
-                outgoingRequestText.Append("outgoing request");
+                const string outgoingRequestText = "outgoing request";
+
+                Guid urn;
 
                 if (requestCopyForLogging.Headers.MessageId != null)
                 {
-                    outgoingRequestText.AppendFormat(" ({0})",
-                        _helper.StripFormattingFromHeaderRelatesTo(requestCopyForLogging.Headers.MessageId.ToString()));
+                    var possibleUrn = _helper.StripFormattingFromHeaderMessageId(requestCopyForLogging.Headers.MessageId.ToString());
+                    if (!Guid.TryParseExact(possibleUrn, "D", out urn))
+                    {
+                        urn = new Guid();
+                    }
+                }
+                else
+                {
+                    urn = new Guid();
                 }
 
-                _logger.Log("MVC Client Side", outgoingRequestText, requestCopyForLogging);
+                _logger.Log("MVC Client Side", outgoingRequestText, urn, requestCopyForLogging);
             }
         }
 
@@ -97,16 +104,25 @@
             if (_helper.ShouldLogSoapRequestsAndResponses())
             {
                 // ToDo: Get rid of the magic strings
-                var incomingReplyText = new StringBuilder();
-                incomingReplyText.Append("incoming reply");
+                const string incomingReplyText = "incoming reply";
+
+                Guid urn;
 
                 if (replyCopyForLogging.Headers.RelatesTo != null)
                 {
-                    incomingReplyText.AppendFormat(" ({0})",
-                        _helper.StripFormattingFromHeaderMessageId(replyCopyForLogging.Headers.RelatesTo.ToString()));
+                    var possibleUrn = _helper.StripFormattingFromHeaderMessageId(replyCopyForLogging.Headers.RelatesTo.ToString());
+
+                    if (!Guid.TryParseExact(possibleUrn, "D", out urn))
+                    {
+                        urn = new Guid();
+                    }
+                }
+                else
+                {
+                    urn = new Guid();
                 }
 
-                _logger.Log("MVC Client Side", incomingReplyText, replyCopyForLogging);
+                _logger.Log("MVC Client Side", incomingReplyText, urn, replyCopyForLogging);
             }
         }
     }
