@@ -37,9 +37,17 @@
             var requestCopyForLogging = requestBuffer.CreateMessage();
             request = requestBuffer.CreateMessage();
 
-            // Since this is .NET 4.0, cannot use Task.Run
-            // Using Task.Factory.StartNew instead
-            Task.Factory.StartNew(() => StartLoggingTheRequest(requestCopyForLogging));
+            try
+            {
+                // Since this is .NET 4.0, cannot use Task.Run
+                // Using Task.Factory.StartNew instead
+                Task.Factory.StartNew(() => StartLoggingTheRequest(requestCopyForLogging));
+            }
+            catch
+            {
+                // ToDo: Log an issue to the event log
+                throw;
+            }
 
             return request;
         }
@@ -52,27 +60,35 @@
         /// <param name="requestCopyForLogging"></param>
         public void StartLoggingTheRequest(Message requestCopyForLogging)
         {
-            if (_helper.ShouldLogSoapRequestsAndResponses())
+            try
             {
-                // ToDo: Get rid of the magic strings
-                const string outgoingRequestText = "outgoing request";
-
-                Guid urn;
-
-                if (requestCopyForLogging.Headers.MessageId != null)
+                if (_helper.ShouldLogSoapRequestsAndResponses())
                 {
-                    var possibleUrn = _helper.StripFormattingFromHeaderMessageId(requestCopyForLogging.Headers.MessageId.ToString());
-                    if (!Guid.TryParseExact(possibleUrn, "D", out urn))
+                    // ToDo: Get rid of the magic strings
+                    const string outgoingRequestText = "outgoing request";
+
+                    Guid urn;
+
+                    if (requestCopyForLogging.Headers.MessageId != null)
+                    {
+                        var possibleUrn = _helper.StripFormattingFromHeaderMessageId(requestCopyForLogging.Headers.MessageId.ToString());
+                        if (!Guid.TryParseExact(possibleUrn, "D", out urn))
+                        {
+                            urn = new Guid();
+                        }
+                    }
+                    else
                     {
                         urn = new Guid();
                     }
-                }
-                else
-                {
-                    urn = new Guid();
-                }
 
-                _logger.Log("MVC Client Side", outgoingRequestText, urn, requestCopyForLogging);
+                    _logger.Log("MVC Client Side", outgoingRequestText, urn, requestCopyForLogging);
+                }
+            }
+            catch
+            {
+                // ToDo: Log an issue to the event log
+                throw;
             }
         }
 
@@ -88,9 +104,17 @@
             var replyCopyForLogging = replyBuffer.CreateMessage();
             reply = replyBuffer.CreateMessage();
 
-            // Since this is .NET 4.0, cannot use Task.Run
-            // Using Task.Factory.StartNew instead
-            Task.Factory.StartNew(() => StartLoggingTheReply(replyCopyForLogging)); ;
+            try
+            {
+                // Since this is .NET 4.0, cannot use Task.Run
+                // Using Task.Factory.StartNew instead
+                Task.Factory.StartNew(() => StartLoggingTheReply(replyCopyForLogging)); ;
+            }
+            catch
+            {
+                // ToDo: Log an issue to the event log
+                throw;
+            }
         }
 
         /// <summary>
@@ -101,28 +125,36 @@
         /// <param name="replyCopyForLogging"></param>
         public void StartLoggingTheReply(Message replyCopyForLogging)
         {
-            if (_helper.ShouldLogSoapRequestsAndResponses())
+            try
             {
-                // ToDo: Get rid of the magic strings
-                const string incomingReplyText = "incoming reply";
-
-                Guid urn;
-
-                if (replyCopyForLogging.Headers.RelatesTo != null)
+                if (_helper.ShouldLogSoapRequestsAndResponses())
                 {
-                    var possibleUrn = _helper.StripFormattingFromHeaderMessageId(replyCopyForLogging.Headers.RelatesTo.ToString());
+                    // ToDo: Get rid of the magic strings
+                    const string incomingReplyText = "incoming reply";
 
-                    if (!Guid.TryParseExact(possibleUrn, "D", out urn))
+                    Guid urn;
+
+                    if (replyCopyForLogging.Headers.RelatesTo != null)
+                    {
+                        var possibleUrn = _helper.StripFormattingFromHeaderMessageId(replyCopyForLogging.Headers.RelatesTo.ToString());
+
+                        if (!Guid.TryParseExact(possibleUrn, "D", out urn))
+                        {
+                            urn = new Guid();
+                        }
+                    }
+                    else
                     {
                         urn = new Guid();
                     }
-                }
-                else
-                {
-                    urn = new Guid();
-                }
 
-                _logger.Log("MVC Client Side", incomingReplyText, urn, replyCopyForLogging);
+                    _logger.Log("MVC Client Side", incomingReplyText, urn, replyCopyForLogging);
+                }
+            }
+            catch
+            {
+                throw;
+                // ToDo: Log an issue to the event log
             }
         }
     }
