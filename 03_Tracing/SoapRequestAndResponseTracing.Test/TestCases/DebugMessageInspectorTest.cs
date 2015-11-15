@@ -68,13 +68,13 @@
         }
 
         /// <summary>
-        /// BeforeSendRequest_Success
+        /// DebugMessageInspector_BeforeSendRequest_Success
         /// </summary>
         [TestMethod]
         [TestCategory("IntegrationTest")]
         [TestCategory("HappyPath")]
         [TestCategory("DebugMessageInspector")]
-        public void BeforeSendRequest_Success()
+        public void DebugMessageInspector_BeforeSendRequest_Success()
         {
             // Arrange
 
@@ -104,13 +104,13 @@
         }
 
         /// <summary>
-        /// StartLoggingTheRequest_Success
+        /// DebugMessageInspector_StartLoggingTheRequest_Success
         /// </summary>
         [TestMethod]
         [TestCategory("IntegrationTest")]
         [TestCategory("HappyPath")]
         [TestCategory("DebugMessageInspector")]
-        public void StartLoggingTheRequest_Success()
+        public void DebugMessageInspector_StartLoggingTheRequest_Success()
         {
             // Arrange
 
@@ -139,13 +139,13 @@
         }
 
         /// <summary>
-        /// AfterReceiveReply_Success
+        /// DebugMessageInspector_AfterReceiveReply_Success
         /// </summary>
         [TestMethod]
         [TestCategory("IntegrationTest")]
         [TestCategory("HappyPath")]
         [TestCategory("DebugMessageInspector")]
-        public void AfterReceiveReply_Success()
+        public void DebugMessageInspector_AfterReceiveReply_Success()
         {
             // Arrange
 
@@ -168,20 +168,20 @@
                 // Note: If the SoapRequestsAndResponsesShouldLog in App.config is true, then the value should be logged to the DB
                 myDebugMessageInspector.AfterReceiveReply(ref expectedMessage, myCorrelationState);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Assert.Fail("{0}", ex);
             }
         }
 
         /// <summary>
-        /// StartLoggingTheReply_Success
+        /// DebugMessageInspector_StartLoggingTheReply_Success
         /// </summary>
         [TestMethod]
         [TestCategory("IntegrationTest")]
         [TestCategory("HappyPath")]
         [TestCategory("DebugMessageInspector")]
-        public void StartLoggingTheReply_Success()
+        public void DebugMessageInspector_StartLoggingTheReply_Success()
         {
             // Arrange
 

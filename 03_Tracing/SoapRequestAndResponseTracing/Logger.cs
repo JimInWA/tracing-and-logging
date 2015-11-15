@@ -138,7 +138,7 @@
             try
             {
                 // ToDo: Get rid of the magic strings
-                var applicationName = "Unknown";
+                var applicationName = sourceType;
 
                 // ToDo: Get rid of the magic strings
                 var configSetting = ConfigurationManager.AppSettings["SoapRequestsAndResponsesApplicationName"];

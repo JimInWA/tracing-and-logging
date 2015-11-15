@@ -33,12 +33,12 @@
         /// <returns></returns>
         public object BeforeSendRequest(ref Message request, IClientChannel channel)
         {
-            var requestBuffer = request.CreateBufferedCopy(Int32.MaxValue);
-            var requestCopyForLogging = requestBuffer.CreateMessage();
-            request = requestBuffer.CreateMessage();
-
             try
             {
+                var requestBuffer = request.CreateBufferedCopy(Int32.MaxValue);
+                var requestCopyForLogging = requestBuffer.CreateMessage();
+                request = requestBuffer.CreateMessage();
+
                 // Since this is .NET 4.0, cannot use Task.Run
                 // Using Task.Factory.StartNew instead
                 Task.Factory.StartNew(() => StartLoggingTheRequest(requestCopyForLogging));
@@ -100,12 +100,12 @@
         /// <param name="correlationState"></param>
         public void AfterReceiveReply(ref Message reply, object correlationState)
         {
-            var replyBuffer = reply.CreateBufferedCopy(Int32.MaxValue);
-            var replyCopyForLogging = replyBuffer.CreateMessage();
-            reply = replyBuffer.CreateMessage();
-
             try
             {
+                var replyBuffer = reply.CreateBufferedCopy(Int32.MaxValue);
+                var replyCopyForLogging = replyBuffer.CreateMessage();
+                reply = replyBuffer.CreateMessage();
+
                 // Since this is .NET 4.0, cannot use Task.Run
                 // Using Task.Factory.StartNew instead
                 Task.Factory.StartNew(() => StartLoggingTheReply(replyCopyForLogging)); ;

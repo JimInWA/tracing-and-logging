@@ -34,13 +34,21 @@
         /// <returns></returns>
         public object AfterReceiveRequest(ref Message request, IClientChannel channel, InstanceContext instanceContext)
         {
-            var requestBuffer = request.CreateBufferedCopy(Int32.MaxValue);
-            var requestCopyForLogging = requestBuffer.CreateMessage();
-            request = requestBuffer.CreateMessage();
+            try
+            {
+                var requestBuffer = request.CreateBufferedCopy(Int32.MaxValue);
+                var requestCopyForLogging = requestBuffer.CreateMessage();
+                request = requestBuffer.CreateMessage();
 
-            // Since this is .NET 4.0, cannot use Task.Run
-            // Using Task.Factory.StartNew instead
-            Task.Factory.StartNew(() => StartLoggingTheRequest(requestCopyForLogging));
+                // Since this is .NET 4.0, cannot use Task.Run
+                // Using Task.Factory.StartNew instead
+                Task.Factory.StartNew(() => StartLoggingTheRequest(requestCopyForLogging));
+            }
+            catch
+            {
+                // ToDo: Log an issue to the event log
+                throw;
+            }
 
             return request;
         }
@@ -53,27 +61,35 @@
         /// <param name="requestCopyForLogging"></param>
         public void StartLoggingTheRequest(Message requestCopyForLogging)
         {
-            if (_helper.ShouldLogSoapRequestsAndResponses())
+            try
             {
-                // ToDo: Get rid of the magic strings
-                const string incomingRequestText = "incoming request";
+                if (_helper.ShouldLogSoapRequestsAndResponses())
+                {
+                    // ToDo: Get rid of the magic strings
+                    const string incomingRequestText = "incoming request";
 
-                Guid urn;
+                    Guid urn;
 
-                if (requestCopyForLogging.Headers.MessageId != null)
-                { 
-                    var possibleUrn = _helper.StripFormattingFromHeaderMessageId(requestCopyForLogging.Headers.MessageId.ToString());
-                    if (!Guid.TryParseExact(possibleUrn, "D", out urn))
+                    if (requestCopyForLogging.Headers.MessageId != null)
+                    {
+                        var possibleUrn = _helper.StripFormattingFromHeaderMessageId(requestCopyForLogging.Headers.MessageId.ToString());
+                        if (!Guid.TryParseExact(possibleUrn, "D", out urn))
+                        {
+                            urn = new Guid();
+                        }
+                    }
+                    else
                     {
                         urn = new Guid();
                     }
-                }
-                else
-                {
-                    urn = new Guid();                    
-                }
 
-                _logger.Log("WCF Server Side", incomingRequestText, urn, requestCopyForLogging);
+                    _logger.Log("WCF Server Side", incomingRequestText, urn, requestCopyForLogging);
+                }
+            }
+            catch
+            {
+                // ToDo: Log an issue to the event log
+                throw;
             }
         }
 
@@ -85,13 +101,21 @@
         /// <param name="correlationState"></param>
         public void BeforeSendReply(ref Message reply, object correlationState)
         {
-            var replyBuffer = reply.CreateBufferedCopy(Int32.MaxValue);
-            var replyCopyForLogging = replyBuffer.CreateMessage();
-            reply = replyBuffer.CreateMessage();
+            try
+            {
+                var replyBuffer = reply.CreateBufferedCopy(Int32.MaxValue);
+                var replyCopyForLogging = replyBuffer.CreateMessage();
+                reply = replyBuffer.CreateMessage();
 
-            // Since this is .NET 4.0, cannot use Task.Run
-            // Using Task.Factory.StartNew instead
-            Task.Factory.StartNew(() => StartLoggingTheReply(replyCopyForLogging));
+                // Since this is .NET 4.0, cannot use Task.Run
+                // Using Task.Factory.StartNew instead
+                Task.Factory.StartNew(() => StartLoggingTheReply(replyCopyForLogging));
+            }
+            catch
+            {
+                // ToDo: Log an issue to the event log
+                throw;
+            }
         }
 
         /// <summary>
@@ -102,28 +126,36 @@
         /// <param name="replyCopyForLogging"></param>
         public void StartLoggingTheReply(Message replyCopyForLogging)
         {
-            if (_helper.ShouldLogSoapRequestsAndResponses())
+            try
             {
-                // ToDo: Get rid of the magic strings
-                const string outgoingReplyText = "outgoing reply";
-
-                Guid urn;
-
-                if (replyCopyForLogging.Headers.RelatesTo != null)
+                if (_helper.ShouldLogSoapRequestsAndResponses())
                 {
-                    var possibleUrn = _helper.StripFormattingFromHeaderMessageId(replyCopyForLogging.Headers.RelatesTo.ToString());
+                    // ToDo: Get rid of the magic strings
+                    const string outgoingReplyText = "outgoing reply";
 
-                    if (!Guid.TryParseExact(possibleUrn, "D", out urn))
+                    Guid urn;
+
+                    if (replyCopyForLogging.Headers.RelatesTo != null)
+                    {
+                        var possibleUrn = _helper.StripFormattingFromHeaderMessageId(replyCopyForLogging.Headers.RelatesTo.ToString());
+
+                        if (!Guid.TryParseExact(possibleUrn, "D", out urn))
+                        {
+                            urn = new Guid();
+                        }
+                    }
+                    else
                     {
                         urn = new Guid();
                     }
-                }
-                else
-                {
-                    urn = new Guid();
-                }
 
-                _logger.Log("WCF Server Side", outgoingReplyText, urn, replyCopyForLogging);
+                    _logger.Log("WCF Server Side", outgoingReplyText, urn, replyCopyForLogging);
+                }
+            }
+            catch
+            {
+                // ToDo: Log an issue to the event log
+                throw;
             }
         }
     }
