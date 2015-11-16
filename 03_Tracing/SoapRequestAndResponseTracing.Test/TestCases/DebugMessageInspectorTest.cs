@@ -11,62 +11,11 @@
 
 
     /// <summary>
-    /// UnitTest1
+    /// DebugMessageInspector tests
     /// </summary>
     [TestClass]
     public class DebugMessageInspectorTest : UnitTestBaseClass
     {
-        private const string _inspectorSampleRequest = @"TestData\DebugMessageInspector_01_SampleRequest.txt";
-        private const string _inspectorSampleReply = @"TestData\DebugMessageInspector_02_SampleReply.txt";
-
-        private string _inspectorSampleRequestFullPath;
-
-        /// <summary>
-        /// InspectorSampleRequestFullPath - get the full path of the request
-        /// </summary>
-        public string InspectorSampleRequestFullPath
-        {
-            get
-            {
-                if (string.IsNullOrWhiteSpace(_inspectorSampleRequestFullPath))
-                {
-                    // Get the current assembly location from the public property in the base class
-                    _inspectorSampleRequestFullPath = Path.Combine(AssemblyDirectory.Replace(" ", "%"), _inspectorSampleRequest);
-
-                    if (!File.Exists(_inspectorSampleRequestFullPath))
-                    {
-                        Assert.Fail("File location \"{0}\" does not exist");
-                    }
-                }
-
-                return _inspectorSampleRequestFullPath;
-            }
-        }
-
-        private string _inspectorSampleReplyFullPath;
-
-        /// <summary>
-        /// InspectorSampleReplyFullPath - get the full path of the reply
-        /// </summary>
-        public string InspectorSampleReplyFullPath
-        {
-            get
-            {
-                if (string.IsNullOrWhiteSpace(_inspectorSampleReplyFullPath))
-                {
-                    // Get the current assembly location from the public property in the base class
-                    _inspectorSampleReplyFullPath = Path.Combine(AssemblyDirectory.Replace(" ", "%"), _inspectorSampleReply);
-
-                    if (!File.Exists(_inspectorSampleReplyFullPath))
-                    {
-                        Assert.Fail("File location \"{0}\" does not exist");
-                    }
-                }
-
-                return _inspectorSampleReplyFullPath;
-            }
-        }
-
         /// <summary>
         /// DebugMessageInspector_BeforeSendRequest_Success
         /// </summary>
@@ -77,8 +26,6 @@
         public void DebugMessageInspector_BeforeSendRequest_Success()
         {
             // Arrange
-
-            // ToDo: get the assembly path and then read the file from the TestData folder
             var messageText = File.ReadAllText(InspectorSampleRequestFullPath);
 
             // Create the Message
@@ -113,8 +60,6 @@
         public void DebugMessageInspector_StartLoggingTheRequest_Success()
         {
             // Arrange
-
-            // ToDo: get the assembly path and then read the file from the TestData folder
             var messageText = File.ReadAllText(InspectorSampleRequestFullPath);
 
             // Create the Message
@@ -148,8 +93,6 @@
         public void DebugMessageInspector_AfterReceiveReply_Success()
         {
             // Arrange
-
-            // ToDo: get the assembly path and then read the file from the TestData folder
             var messageText = File.ReadAllText(InspectorSampleReplyFullPath);
 
             // Create the Message
@@ -184,8 +127,6 @@
         public void DebugMessageInspector_StartLoggingTheReply_Success()
         {
             // Arrange
-
-            // ToDo: get the assembly path and then read the file from the TestData folder
             var messageText = File.ReadAllText(InspectorSampleReplyFullPath);
 
             // Create the Message

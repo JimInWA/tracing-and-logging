@@ -25,25 +25,37 @@
         /// <param name="urnUuid"></param>
         /// <param name="message"></param>
         /// <returns></returns>
-        public void Log(string sourceType, string stepName, Guid urnUuid, Message message)
+        public bool Log(string sourceType, string stepName, Guid urnUuid, Message message)
         {
-            var uri = string.Empty;
-            if (message.Headers.To != null)
-            {
-                // Server side, incoming request
-                uri = message.Headers.To.AbsoluteUri;
-            }
-            else if (message.Headers.Action != null)
-            {
-                // Client side, outgoing request
-                uri = message.Headers.Action;
-            }
-            
-            // read the message into an XmlDocument as then you can work with the contents 
-            var myXmlDocument = ReadMessageIntoXmlDocument(message);
+            var result = false;
 
-            // Log the contents of xmlDoc to the database
-            LogToDatabase(sourceType, stepName, urnUuid, uri, myXmlDocument);
+            try
+            {
+                var uri = string.Empty;
+                if (message.Headers.To != null)
+                {
+                    // Server side, incoming request
+                    uri = message.Headers.To.AbsoluteUri;
+                }
+                else if (message.Headers.Action != null)
+                {
+                    // Client side, outgoing request
+                    uri = message.Headers.Action;
+                }
+
+                // read the message into an XmlDocument as then you can work with the contents 
+                var myXmlDocument = ReadMessageIntoXmlDocument(message);
+
+                // Log the contents of xmlDoc to the database
+                result = LogToDatabase(sourceType, stepName, urnUuid, uri, myXmlDocument);
+            }
+            catch
+            {
+                // ToDo: Log an issue to the event log
+                throw;
+            }
+
+            return result;
         }
 
         private XmlDocument ReadMessageIntoXmlDocument(Message message)
@@ -62,8 +74,10 @@
             return myXmlDocument;
         }
 
-        private void LogToFile(string sourceType, string stepName, Guid urnUuid, string uri, XmlDocument xmlDocument)
+        private bool LogToFile(string sourceType, string stepName, Guid urnUuid, string uri, XmlDocument xmlDocument)
         {
+            var result = false;
+
             try
             {
                 // ToDo: Get rid of the magic strings
@@ -124,6 +138,8 @@
                     fileAppender.WriteLine("");
                     fileAppender.WriteLine("");
                 }
+
+                result = true;
             }
             catch
             {
@@ -131,10 +147,14 @@
 
                 // ToDo: Log the issue to the event log
             }
+
+            return result;
         }
 
-        private void LogToDatabase(string sourceType, string stepName, Guid urnUuid, string uri, XmlDocument xmlDocument)
+        private bool LogToDatabase(string sourceType, string stepName, Guid urnUuid, string uri, XmlDocument xmlDocument)
         {
+            var result = false;
+
             try
             {
                 // ToDo: Get rid of the magic strings
@@ -192,7 +212,9 @@
                     conn.Open();
 
                     // ExecuteScalar is returning a value due to the command having a select statement after the insert statement
-                    var result = (long)command.ExecuteScalar();
+                    var primaryKeyOfRowInserted = (long)command.ExecuteScalar();
+
+                    result = true;
                 }            
             }
             catch (Exception ex)
@@ -203,6 +225,8 @@
 
                 // ToDo: Log the issue to the event log
             }
+
+            return result;
         }
     }
 }

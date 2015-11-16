@@ -10,7 +10,7 @@
     /// <summary>
     /// DebugMessageInspector class - implements IClientMessageInspector interface
     /// </summary>
-    public class DebugMessageInspector : IClientMessageInspector
+    public class DebugMessageInspector : IClientMessageInspector, IMessageLogging
     {
         private readonly IHelper _helper;
         private readonly ILogger _logger;
@@ -58,8 +58,10 @@
         /// Exposed a public method to allow for consumption by other behavior extensions
         /// </summary>
         /// <param name="requestCopyForLogging"></param>
-        public void StartLoggingTheRequest(Message requestCopyForLogging)
+        public bool StartLoggingTheRequest(Message requestCopyForLogging)
         {
+            var result = false;
+
             try
             {
                 if (_helper.ShouldLogSoapRequestsAndResponses())
@@ -82,7 +84,7 @@
                         urn = new Guid();
                     }
 
-                    _logger.Log("MVC Client Side", outgoingRequestText, urn, requestCopyForLogging);
+                    result = _logger.Log("MVC Client Side", outgoingRequestText, urn, requestCopyForLogging);
                 }
             }
             catch
@@ -90,6 +92,8 @@
                 // ToDo: Log an issue to the event log
                 throw;
             }
+
+            return result;
         }
 
         /// <summary>
@@ -123,8 +127,10 @@
         /// Exposed a public method to allow for consumption by other behavior extensions
         /// </summary>
         /// <param name="replyCopyForLogging"></param>
-        public void StartLoggingTheReply(Message replyCopyForLogging)
+        public bool StartLoggingTheReply(Message replyCopyForLogging)
         {
+            var result = false;
+
             try
             {
                 if (_helper.ShouldLogSoapRequestsAndResponses())
@@ -148,7 +154,7 @@
                         urn = new Guid();
                     }
 
-                    _logger.Log("MVC Client Side", incomingReplyText, urn, replyCopyForLogging);
+                    result = _logger.Log("MVC Client Side", incomingReplyText, urn, replyCopyForLogging);
                 }
             }
             catch
@@ -156,6 +162,8 @@
                 throw;
                 // ToDo: Log an issue to the event log
             }
+
+            return result;
         }
     }
 }

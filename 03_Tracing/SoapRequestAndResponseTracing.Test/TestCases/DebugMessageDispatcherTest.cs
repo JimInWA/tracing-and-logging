@@ -11,62 +11,11 @@
 
 
     /// <summary>
-    /// UnitTest1
+    /// DebugMessageDispatcher tests
     /// </summary>
     [TestClass]
     public class DebugMessageDispatcherTest : UnitTestBaseClass
     {
-        private const string _dispatcherSampleRequest = @"TestData\DebugMessageDispatcher_01_SampleRequest.txt";
-        private const string _dispatcherSampleReply = @"TestData\DebugMessageDispatcher_02_SampleReply.txt";
-
-        private string _dispatcherSampleRequestFullPath;
-
-        /// <summary>
-        /// DispatcherSampleRequestFullPath - get the full path of the request
-        /// </summary>
-        public string DispatcherSampleRequestFullPath
-        {
-            get
-            {
-                if (string.IsNullOrWhiteSpace(_dispatcherSampleRequestFullPath))
-                {
-                    // Get the current assembly location from the public property in the base class
-                    _dispatcherSampleRequestFullPath = Path.Combine(AssemblyDirectory.Replace(" ", "%"), _dispatcherSampleRequest);
-
-                    if (!File.Exists(_dispatcherSampleRequestFullPath))
-                    {
-                        Assert.Fail("File location \"{0}\" does not exist");
-                    }
-                }
-
-                return _dispatcherSampleRequestFullPath;
-            }
-        }
-
-        private string _dispatcherSampleReplyFullPath;
-
-        /// <summary>
-        /// DispatcherSampleReplyFullPath - get the full path of the reply
-        /// </summary>
-        public string DispatcherSampleReplyFullPath
-        {
-            get
-            {
-                if (string.IsNullOrWhiteSpace(_dispatcherSampleReplyFullPath))
-                {
-                    // Get the current assembly location from the public property in the base class
-                    _dispatcherSampleReplyFullPath = Path.Combine(AssemblyDirectory.Replace(" ", "%"), _dispatcherSampleReply);
-
-                    if (!File.Exists(_dispatcherSampleReplyFullPath))
-                    {
-                        Assert.Fail("File location \"{0}\" does not exist");
-                    }
-                }
-
-                return _dispatcherSampleReplyFullPath;
-            }
-        }
-
         /// <summary>
         /// DebugMessageDispatcher_BeforeSendRequest_Success
         /// </summary>
@@ -77,8 +26,6 @@
         public void DebugMessageDispatcher_BeforeSendRequest_Success()
         {
             // Arrange
-
-            // ToDo: get the assembly path and then read the file from the TestData folder
             var messageText = File.ReadAllText(DispatcherSampleRequestFullPath);
 
             // Create the Message
@@ -116,8 +63,6 @@
         public void DebugMessageDispatcher_StartLoggingTheRequest_Success()
         {
             // Arrange
-
-            // ToDo: get the assembly path and then read the file from the TestData folder
             var messageText = File.ReadAllText(DispatcherSampleRequestFullPath);
 
             // Create the Message
@@ -153,8 +98,6 @@
         public void DebugMessageDispatcher_AfterReceiveReply_Success()
         {
             // Arrange
-
-            // ToDo: get the assembly path and then read the file from the TestData folder
             var messageText = File.ReadAllText(DispatcherSampleReplyFullPath);
 
             // Create the Message
@@ -191,8 +134,6 @@
         public void DebugMessageDispatcher_StartLoggingTheReply_Success()
         {
             // Arrange
-
-            // ToDo: get the assembly path and then read the file from the TestData folder
             var messageText = File.ReadAllText(DispatcherSampleReplyFullPath);
 
             // Create the Message

@@ -10,7 +10,7 @@
     /// <summary>
     /// DebugMessageDispatcher class - implements IDispatchMessageInspector interface
     /// </summary>
-    public class DebugMessageDispatcher : IDispatchMessageInspector
+    public class DebugMessageDispatcher : IDispatchMessageInspector, IMessageLogging
     {
         private readonly IHelper _helper;
         private readonly ILogger _logger;
@@ -59,8 +59,10 @@
         /// Exposed a public method to allow for consumption by other behavior extensions
         /// </summary>
         /// <param name="requestCopyForLogging"></param>
-        public void StartLoggingTheRequest(Message requestCopyForLogging)
+        public bool StartLoggingTheRequest(Message requestCopyForLogging)
         {
+            var result = false;
+
             try
             {
                 if (_helper.ShouldLogSoapRequestsAndResponses())
@@ -83,7 +85,7 @@
                         urn = new Guid();
                     }
 
-                    _logger.Log("WCF Server Side", incomingRequestText, urn, requestCopyForLogging);
+                    result = _logger.Log("WCF Server Side", incomingRequestText, urn, requestCopyForLogging);
                 }
             }
             catch
@@ -91,6 +93,8 @@
                 // ToDo: Log an issue to the event log
                 throw;
             }
+
+            return result;
         }
 
         /// <summary>
@@ -124,8 +128,10 @@
         /// Exposed a public method to allow for consumption by other behavior extensions
         /// </summary>
         /// <param name="replyCopyForLogging"></param>
-        public void StartLoggingTheReply(Message replyCopyForLogging)
+        public bool StartLoggingTheReply(Message replyCopyForLogging)
         {
+            var result = false;
+
             try
             {
                 if (_helper.ShouldLogSoapRequestsAndResponses())
@@ -149,7 +155,7 @@
                         urn = new Guid();
                     }
 
-                    _logger.Log("WCF Server Side", outgoingReplyText, urn, replyCopyForLogging);
+                    result = _logger.Log("WCF Server Side", outgoingReplyText, urn, replyCopyForLogging);
                 }
             }
             catch
@@ -157,6 +163,8 @@
                 // ToDo: Log an issue to the event log
                 throw;
             }
+
+            return result;
         }
     }
 

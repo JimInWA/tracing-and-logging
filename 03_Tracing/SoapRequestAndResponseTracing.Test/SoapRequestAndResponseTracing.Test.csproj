@@ -69,6 +69,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestCases\DebugMessageDispatcherTest.cs" />
     <Compile Include="TestCases\DebugMessageInspectorTest.cs" />
+    <Compile Include="TestCases\LoggerTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SoapRequestAndResponseTracing\SoapRequestAndResponseTracing.csproj">
