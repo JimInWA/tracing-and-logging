@@ -58,7 +58,8 @@
         /// Exposed a public method to allow for consumption by other behavior extensions
         /// </summary>
         /// <param name="requestCopyForLogging"></param>
-        public bool StartLoggingTheRequest(Message requestCopyForLogging)
+        /// <param name="messageId"></param>
+        public bool StartLoggingTheRequest(Message requestCopyForLogging, Guid messageId = new Guid())
         {
             var result = false;
 
@@ -127,7 +128,8 @@
         /// Exposed a public method to allow for consumption by other behavior extensions
         /// </summary>
         /// <param name="replyCopyForLogging"></param>
-        public bool StartLoggingTheReply(Message replyCopyForLogging)
+        /// <param name="messageId"></param>
+        public bool StartLoggingTheReply(Message replyCopyForLogging, Guid messageId = new Guid())
         {
             var result = false;
 

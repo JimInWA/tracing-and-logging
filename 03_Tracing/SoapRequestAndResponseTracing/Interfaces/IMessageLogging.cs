@@ -1,5 +1,6 @@
 ﻿namespace SoapRequestAndResponseTracing.Interfaces
 {
+    using System;
     using System.ServiceModel.Channels;
 
     /// <summary>
@@ -12,15 +13,17 @@
         /// StartLoggingTheRequest method stub - starts the process of logging the request
         /// </summary>
         /// <param name="requestCopyForLogging"></param>
+        /// <param name="messageId"></param>
         /// <returns></returns>
-        bool StartLoggingTheRequest(Message requestCopyForLogging);
+        bool StartLoggingTheRequest(Message requestCopyForLogging, Guid messageId);
 
         /// <summary>
         /// StartLoggingTheReply method stub - starts the process of logging the reply
         /// </summary>
         /// <param name="replyCopyForLogging"></param>
+        /// <param name="messageId"></param>
         /// <returns></returns>
-        bool StartLoggingTheReply(Message replyCopyForLogging);
+        bool StartLoggingTheReply(Message replyCopyForLogging, Guid messageId);
 
     }
 }
