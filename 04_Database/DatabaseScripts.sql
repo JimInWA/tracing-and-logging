@@ -141,7 +141,7 @@ GO
 CREATE TABLE [dbo].[SoapRequestAndResponseTracingBase](
 	[ID] [bigint] IDENTITY(1,1) NOT NULL,
 	[CreatedDateTimeUtc] [datetimeoffset](7) NOT NULL,
-	[ApplicationName] [nvarchar](50) NOT NULL,
+	[ApplicationName] [nvarchar](1000) NOT NULL,
 	[IsRequest] [bit] NOT NULL,
 	[IsReply] [bit] NOT NULL,
 	[URN_UUID] [uniqueidentifier] NOT NULL,
