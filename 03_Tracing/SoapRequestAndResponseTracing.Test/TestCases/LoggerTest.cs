@@ -3,7 +3,6 @@
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using System;
     using System.IO;
-    using System.ServiceModel;
     using System.ServiceModel.Channels;
     using System.Xml;
     using SoapRequestAndResponseTracing;
