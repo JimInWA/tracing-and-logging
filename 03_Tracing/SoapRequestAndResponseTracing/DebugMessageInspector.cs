@@ -58,8 +58,7 @@
         /// Exposed a public method to allow for consumption by other behavior extensions
         /// </summary>
         /// <param name="requestCopyForLogging"></param>
-        /// <param name="messageId"></param>
-        public bool StartLoggingTheRequest(Message requestCopyForLogging, Guid messageId = new Guid())
+        public bool StartLoggingTheRequest(Message requestCopyForLogging)
         {
             var result = false;
 
@@ -70,19 +69,12 @@
                     // ToDo: Get rid of the magic strings
                     const string outgoingRequestText = "outgoing request";
 
-                    Guid urn;
+                    var urn = new Guid();
 
                     if (requestCopyForLogging.Headers.MessageId != null)
                     {
                         var possibleUrn = _helper.StripFormattingFromHeaderMessageId(requestCopyForLogging.Headers.MessageId.ToString());
-                        if (!Guid.TryParseExact(possibleUrn, "D", out urn))
-                        {
-                            urn = new Guid();
-                        }
-                    }
-                    else
-                    {
-                        urn = new Guid();
+                        Guid.TryParseExact(possibleUrn, "D", out urn);
                     }
 
                     result = _logger.Log("MVC Client Side", outgoingRequestText, urn, requestCopyForLogging);
@@ -128,8 +120,7 @@
         /// Exposed a public method to allow for consumption by other behavior extensions
         /// </summary>
         /// <param name="replyCopyForLogging"></param>
-        /// <param name="messageId"></param>
-        public bool StartLoggingTheReply(Message replyCopyForLogging, Guid messageId = new Guid())
+        public bool StartLoggingTheReply(Message replyCopyForLogging)
         {
             var result = false;
 
@@ -140,20 +131,13 @@
                     // ToDo: Get rid of the magic strings
                     const string incomingReplyText = "incoming reply";
 
-                    Guid urn;
+                    var urn = new Guid();
 
                     if (replyCopyForLogging.Headers.RelatesTo != null)
                     {
                         var possibleUrn = _helper.StripFormattingFromHeaderMessageId(replyCopyForLogging.Headers.RelatesTo.ToString());
 
-                        if (!Guid.TryParseExact(possibleUrn, "D", out urn))
-                        {
-                            urn = new Guid();
-                        }
-                    }
-                    else
-                    {
-                        urn = new Guid();
+                        Guid.TryParseExact(possibleUrn, "D", out urn);
                     }
 
                     result = _logger.Log("MVC Client Side", incomingReplyText, urn, replyCopyForLogging);
