@@ -1,7 +1,9 @@
 ﻿namespace SoapRequestAndResponseTracing
 {
     using SoapRequestAndResponseTracing.Interfaces;
+    using System;
     using System.Configuration;
+    using System.Xml;
 
     /// <summary>
     /// Helper class - implements IHelper interface
@@ -28,25 +30,39 @@
         }
 
         /// <summary>
-        /// StripFormattingFromHeaderMessageId method - strips the colons and dashes from the Header's MesssageId 
+        /// ProvideUrnFromHeaderMessageId method - gives the URN from the Header.MessageId;
+        /// if not valid, returns an empty GUID (all zeroes)
         /// </summary>
-        /// <param name="messageId"></param>
         /// <returns></returns>
-        public string StripFormattingFromHeaderMessageId(string messageId)
+        public Guid ProvideUrnFromHeaderMessageId(UniqueId messageId)
         {
-            var result = StripFormattingFromHeaderFields(messageId);
-            return result;
+            var urn = ProvideUrnFromHeaderFields(messageId);
+
+            return urn;
         }
 
         /// <summary>
-        /// StripFormattingFromHeaderRelatesTo method - strips the colons and dashes from the Header's RelatesTo
+        /// ProvideUrnFromHeaderRelatesTo method - gives the URN from the Header.RelatesTo;
+        /// if not valid, returns an empty GUID (all zeroes)
         /// </summary>
-        /// <param name="relatesTo"></param>
         /// <returns></returns>
-        public string StripFormattingFromHeaderRelatesTo(string relatesTo)
+        public Guid ProvideUrnFromHeaderRelatesTo(UniqueId relatesTo)
         {
-            var result = StripFormattingFromHeaderFields(relatesTo);
-            return result;
+            var urn = ProvideUrnFromHeaderFields(relatesTo);
+
+            return urn;
+        }
+
+        private Guid ProvideUrnFromHeaderFields(UniqueId headerField)
+        {
+            var urn = new Guid();
+
+            if (headerField != null)
+            {
+                var possibleUrnAsString = StripFormattingFromHeaderFields(headerField.ToString());
+                Guid.TryParseExact(possibleUrnAsString, "D", out urn);
+            }
+            return urn;            
         }
 
         private string StripFormattingFromHeaderFields(string headerField)

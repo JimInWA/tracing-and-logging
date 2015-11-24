@@ -1,5 +1,8 @@
 ﻿namespace SoapRequestAndResponseTracing.Interfaces
 {
+    using System;
+    using System.Xml;
+
     /// <summary>
     /// IHelper interface
     /// General utility methods to reduce code duplication
@@ -13,17 +16,17 @@
         bool ShouldLogSoapRequestsAndResponses();
 
         /// <summary>
-        /// StripFormattingFromHeaderMessageId method stub - strips the colons and dashes from the Header's MesssageId 
+        /// ProvideUrnFromHeaderMessageId method - gives the URN from the Header.MessageId;
+        /// if not valid, returns an empty GUID (all zeroes)
         /// </summary>
-        /// <param name="messageId"></param>
         /// <returns></returns>
-        string StripFormattingFromHeaderMessageId(string messageId);
+        Guid ProvideUrnFromHeaderMessageId(UniqueId messageId);
 
         /// <summary>
-        /// StripFormattingFromHeaderRelatesTo method stub - strips the colons and dashes from the Header's RelatesTo
+        /// ProvideUrnFromHeaderRelatesTo method - gives the URN from the Header.RelatesTo;
+        /// if not valid, returns an empty GUID (all zeroes)
         /// </summary>
-        /// <param name="relatesTo"></param>
         /// <returns></returns>
-        string StripFormattingFromHeaderRelatesTo(string relatesTo);
+        Guid ProvideUrnFromHeaderRelatesTo(UniqueId relatesTo);
     }
 }

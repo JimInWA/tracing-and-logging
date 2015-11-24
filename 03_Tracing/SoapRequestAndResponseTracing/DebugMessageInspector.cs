@@ -69,13 +69,7 @@
                     // ToDo: Get rid of the magic strings
                     const string outgoingRequestText = "outgoing request";
 
-                    var urn = new Guid();
-
-                    if (requestCopyForLogging.Headers.MessageId != null)
-                    {
-                        var possibleUrn = _helper.StripFormattingFromHeaderMessageId(requestCopyForLogging.Headers.MessageId.ToString());
-                        Guid.TryParseExact(possibleUrn, "D", out urn);
-                    }
+                    var urn = _helper.ProvideUrnFromHeaderMessageId(requestCopyForLogging.Headers.MessageId);
 
                     result = _logger.Log("MVC Client Side", outgoingRequestText, urn, requestCopyForLogging);
                 }
@@ -131,14 +125,7 @@
                     // ToDo: Get rid of the magic strings
                     const string incomingReplyText = "incoming reply";
 
-                    var urn = new Guid();
-
-                    if (replyCopyForLogging.Headers.RelatesTo != null)
-                    {
-                        var possibleUrn = _helper.StripFormattingFromHeaderMessageId(replyCopyForLogging.Headers.RelatesTo.ToString());
-
-                        Guid.TryParseExact(possibleUrn, "D", out urn);
-                    }
+                    var urn = _helper.ProvideUrnFromHeaderRelatesTo(replyCopyForLogging.Headers.RelatesTo);
 
                     result = _logger.Log("MVC Client Side", incomingReplyText, urn, replyCopyForLogging);
                 }

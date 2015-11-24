@@ -70,13 +70,7 @@
                     // ToDo: Get rid of the magic strings
                     const string incomingRequestText = "incoming request";
 
-                    var urn = new Guid(); 
-
-                    if (requestCopyForLogging.Headers.MessageId != null)
-                    {
-                        var possibleUrn = _helper.StripFormattingFromHeaderMessageId(requestCopyForLogging.Headers.MessageId.ToString());
-                        Guid.TryParseExact(possibleUrn, "D", out urn);
-                    }
+                    var urn = _helper.ProvideUrnFromHeaderMessageId(requestCopyForLogging.Headers.MessageId);
 
                     result = _logger.Log("WCF Server Side", incomingRequestText, urn, requestCopyForLogging);
                 }
@@ -132,14 +126,7 @@
                     // ToDo: Get rid of the magic strings
                     const string outgoingReplyText = "outgoing reply";
 
-                    var urn = new Guid();
-
-                    if (replyCopyForLogging.Headers.RelatesTo != null)
-                    {
-                        var possibleUrn = _helper.StripFormattingFromHeaderMessageId(replyCopyForLogging.Headers.RelatesTo.ToString());
-
-                        Guid.TryParseExact(possibleUrn, "D", out urn);
-                    }
+                    var urn = _helper.ProvideUrnFromHeaderRelatesTo(replyCopyForLogging.Headers.RelatesTo);
 
                     result = _logger.Log("WCF Server Side", outgoingReplyText, urn, replyCopyForLogging);
                 }
