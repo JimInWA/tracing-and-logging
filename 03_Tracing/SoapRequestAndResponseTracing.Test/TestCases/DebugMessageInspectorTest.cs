@@ -27,6 +27,11 @@
         /// </summary>
         public Guid Urn;
 
+        /// <summary>
+        /// TestHelperForTests is the TestHelper used for the tests
+        /// </summary>
+        public TestHelper TestHelperForTests;
+
         #endregion
 
         #region Additional test attributes
@@ -40,6 +45,7 @@
             var myHelper = new Helper();
             var myLogger = new Logger();
             DebugMessageInspectorForTests = new DebugMessageInspector(myHelper, myLogger);
+            TestHelperForTests = new TestHelper();
         }
         #endregion
 
@@ -55,8 +61,9 @@
             // Arrange
             const string methodName = "DebugMessageInspector_BeforeSendRequest_Success";
             var uniqueId = new UniqueId(Urn);
-            var messageText = File.ReadAllText(InspectorSampleRequestFullPath).Replace("urn:uuid:00000000-0000-0000-0000-000000000000", uniqueId.ToString());
-            var xmlReader = XmlReader.Create(new StringReader(messageText));
+            var messageTextJustInnerXmlOfBody = File.ReadAllText(InspectorSampleRequestJustInnerXmlOfBodyFullPath);
+            var messageTextFull = File.ReadAllText(InspectorSampleRequestFullPath).Replace("Method_Name", methodName).Replace("urn:uuid:00000000-0000-0000-0000-000000000000", uniqueId.ToString());
+            var xmlReader = XmlReader.Create(new StringReader(messageTextJustInnerXmlOfBody));
 
             // Create the Message
             var expectedMessage = Message.CreateMessage(MessageVersion.Default, methodName, xmlReader);
@@ -75,6 +82,17 @@
             {
                 Assert.Fail("{0}", ex);
             }
+
+            // if you want to inspect the value logged in the table, stop the test at this point
+
+            var applicationName = TestHelperForTests.GetAppSettingsKey("SoapRequestsAndResponsesApplicationName");
+            const bool isRequest = true;
+            const bool isResponse = false;
+            var sqlSelectStatement = TestHelperForTests.BuildSqlSelectStatement(applicationName, isRequest, isResponse, Urn, methodName, messageTextFull);
+            const int expectedRowCount = 1;
+            var rowIdValue = TestHelperForTests.ExecuteSqlSelectStatement(sqlSelectStatement, expectedRowCount);
+            var sqlDeleteStatement = TestHelperForTests.BuildSqlDeleteStatement(rowIdValue);
+            TestHelperForTests.ExecuteSqlDeleteStatement(sqlDeleteStatement, expectedRowCount);
         }
 
         /// <summary>
@@ -89,8 +107,9 @@
             // Arrange
             const string methodName = "DebugMessageInspector_StartLoggingTheRequest_Success";
             var uniqueId = new UniqueId(Urn);
-            var messageText = File.ReadAllText(InspectorSampleRequestFullPath).Replace("urn:uuid:00000000-0000-0000-0000-000000000000", uniqueId.ToString());
-            var xmlReader = XmlReader.Create(new StringReader(messageText));
+            var messageTextJustInnerXmlOfBody = File.ReadAllText(InspectorSampleRequestJustInnerXmlOfBodyFullPath);
+            var messageTextFull = File.ReadAllText(InspectorSampleRequestFullPath).Replace("Method_Name", methodName).Replace("urn:uuid:00000000-0000-0000-0000-000000000000", uniqueId.ToString());
+            var xmlReader = XmlReader.Create(new StringReader(messageTextJustInnerXmlOfBody));
 
             // Create the Message
             var expectedMessage = Message.CreateMessage(MessageVersion.Default, methodName, xmlReader);
@@ -108,6 +127,17 @@
             {
                 Assert.Fail("{0}", ex);
             }
+
+            // if you want to inspect the value logged in the table, stop the test at this point
+
+            var applicationName = TestHelperForTests.GetAppSettingsKey("SoapRequestsAndResponsesApplicationName");
+            const bool isRequest = true;
+            const bool isResponse = false;
+            var sqlSelectStatement = TestHelperForTests.BuildSqlSelectStatement(applicationName, isRequest, isResponse, Urn, methodName, messageTextFull);
+            const int expectedRowCount = 1;
+            var rowIdValue = TestHelperForTests.ExecuteSqlSelectStatement(sqlSelectStatement, expectedRowCount);
+            var sqlDeleteStatement = TestHelperForTests.BuildSqlDeleteStatement(rowIdValue);
+            TestHelperForTests.ExecuteSqlDeleteStatement(sqlDeleteStatement, expectedRowCount);
         }
 
         /// <summary>
@@ -122,8 +152,9 @@
             // Arrange
             const string methodName = "DebugMessageInspector_AfterReceiveReply_Success";
             var uniqueId = new UniqueId(Urn);
-            var messageText = File.ReadAllText(InspectorSampleReplyFullPath).Replace("urn:uuid:00000000-0000-0000-0000-000000000000", uniqueId.ToString());
-            var xmlReader = XmlReader.Create(new StringReader(messageText));
+            var messageTextJustInnerXmlOfBody = File.ReadAllText(InspectorSampleReplyJustInnerXmlOfBodyFullPath);
+            var messageTextFull = File.ReadAllText(InspectorSampleReplyFullPath).Replace("Method_Name", methodName).Replace("urn:uuid:00000000-0000-0000-0000-000000000000", uniqueId.ToString());
+            var xmlReader = XmlReader.Create(new StringReader(messageTextJustInnerXmlOfBody));
 
             // Create the Message
             var expectedMessage = Message.CreateMessage(MessageVersion.Default, methodName, xmlReader);
@@ -142,6 +173,17 @@
             {
                 Assert.Fail("{0}", ex);
             }
+
+            // if you want to inspect the value logged in the table, stop the test at this point
+
+            var applicationName = TestHelperForTests.GetAppSettingsKey("SoapRequestsAndResponsesApplicationName");
+            const bool isRequest = false;
+            const bool isResponse = true;
+            var sqlSelectStatement = TestHelperForTests.BuildSqlSelectStatement(applicationName, isRequest, isResponse, Urn, methodName, messageTextFull);
+            const int expectedRowCount = 1;
+            var rowIdValue = TestHelperForTests.ExecuteSqlSelectStatement(sqlSelectStatement, expectedRowCount);
+            var sqlDeleteStatement = TestHelperForTests.BuildSqlDeleteStatement(rowIdValue);
+            TestHelperForTests.ExecuteSqlDeleteStatement(sqlDeleteStatement, expectedRowCount);
         }
 
         /// <summary>
@@ -156,8 +198,9 @@
             // Arrange
             const string methodName = "DebugMessageInspector_StartLoggingTheReply_Success";
             var uniqueId = new UniqueId(Urn);
-            var messageText = File.ReadAllText(InspectorSampleReplyFullPath).Replace("urn:uuid:00000000-0000-0000-0000-000000000000", uniqueId.ToString());
-            var xmlReader = XmlReader.Create(new StringReader(messageText));
+            var messageTextJustInnerXmlOfBody = File.ReadAllText(InspectorSampleReplyJustInnerXmlOfBodyFullPath);
+            var messageTextFull = File.ReadAllText(InspectorSampleReplyFullPath).Replace("Method_Name", methodName).Replace("urn:uuid:00000000-0000-0000-0000-000000000000", uniqueId.ToString());
+            var xmlReader = XmlReader.Create(new StringReader(messageTextJustInnerXmlOfBody));
 
             // Create the Message
             var expectedMessage = Message.CreateMessage(MessageVersion.Default, methodName, xmlReader);
@@ -175,6 +218,17 @@
             {
                 Assert.Fail("{0}", ex);
             }
+
+            // if you want to inspect the value logged in the table, stop the test at this point
+
+            var applicationName = TestHelperForTests.GetAppSettingsKey("SoapRequestsAndResponsesApplicationName");
+            const bool isRequest = false;
+            const bool isResponse = true;
+            var sqlSelectStatement = TestHelperForTests.BuildSqlSelectStatement(applicationName, isRequest, isResponse, Urn, methodName, messageTextFull);
+            const int expectedRowCount = 1;
+            var rowIdValue = TestHelperForTests.ExecuteSqlSelectStatement(sqlSelectStatement, expectedRowCount);
+            var sqlDeleteStatement = TestHelperForTests.BuildSqlDeleteStatement(rowIdValue);
+            TestHelperForTests.ExecuteSqlDeleteStatement(sqlDeleteStatement, expectedRowCount);
         }
     }
 }

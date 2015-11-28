@@ -1,0 +1,1 @@
+<AddTwoNumbersResponse xmlns="http://tempuri.org/"><AddTwoNumbersResult>5</AddTwoNumbersResult></AddTwoNumbersResponse>

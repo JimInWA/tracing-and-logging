@@ -76,7 +76,6 @@
         }
 
         private const string _dispatcherSampleReply = @"TestData\DebugMessageDispatcher_02_SampleReply.txt";
-        private const string _dispatcherSampleReplyJustInnerXmlOfBody = @"TestData\DebugMessageDispatcher_02_SampleReply_JustInnerXmlOfBody.txt";
 
         private string _dispatcherSampleReplyFullPath;
 
@@ -101,6 +100,8 @@
                 return _dispatcherSampleReplyFullPath;
             }
         }
+
+        private const string _dispatcherSampleReplyJustInnerXmlOfBody = @"TestData\DebugMessageDispatcher_02_SampleReply_JustInnerXmlOfBody.txt";
 
         private string _dispatcherSampleReplyJustInnerXmlOfBodyFullPath;
 
@@ -127,7 +128,6 @@
         }
 
         private const string _inspectorSampleRequest = @"TestData\DebugMessageInspector_01_SampleRequest.txt";
-        private const string _inspectorSampleReply = @"TestData\DebugMessageInspector_02_SampleReply.txt";
 
         private string _inspectorSampleRequestFullPath;
 
@@ -153,6 +153,34 @@
             }
         }
 
+        private const string _inspectorSampleRequestJustInnerXmlOfBody = @"TestData\DebugMessageInspector_01_SampleRequest_JustInnerXmlOfBody.txt";
+
+        private string _inspectorSampleRequestJustInnerXmlOfBodyFullPath;
+
+        /// <summary>
+        /// InspectorSampleRequestFullPath - get the full path of the request
+        /// </summary>
+        public string InspectorSampleRequestJustInnerXmlOfBodyFullPath
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(_inspectorSampleRequestJustInnerXmlOfBodyFullPath))
+                {
+                    // Get the current assembly location from the public property in the base class
+                    _inspectorSampleRequestJustInnerXmlOfBodyFullPath = Path.Combine(AssemblyDirectory.Replace(" ", "%"), _inspectorSampleRequestJustInnerXmlOfBody);
+
+                    if (!File.Exists(_inspectorSampleRequestJustInnerXmlOfBodyFullPath))
+                    {
+                        Assert.Fail("File location \"{0}\" does not exist", _inspectorSampleRequestJustInnerXmlOfBodyFullPath);
+                    }
+                }
+
+                return _inspectorSampleRequestJustInnerXmlOfBodyFullPath;
+            }
+        }
+
+        private const string _inspectorSampleReply = @"TestData\DebugMessageInspector_02_SampleReply.txt";
+
         private string _inspectorSampleReplyFullPath;
 
         /// <summary>
@@ -177,8 +205,33 @@
             }
         }
 
+        private const string _inspectorSampleReplyJustInnerXmlOfBody = @"TestData\DebugMessageInspector_02_SampleReply_JustInnerXmlOfBody.txt";
+
+        private string _inspectorSampleReplyJustInnerXmlOfBodyFullPath;
+
+        /// <summary>
+        /// InspectorSampleReplyFullPath - get the full path of the reply
+        /// </summary>
+        public string InspectorSampleReplyJustInnerXmlOfBodyFullPath
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(_inspectorSampleReplyJustInnerXmlOfBodyFullPath))
+                {
+                    // Get the current assembly location from the public property in the base class
+                    _inspectorSampleReplyJustInnerXmlOfBodyFullPath = Path.Combine(AssemblyDirectory.Replace(" ", "%"), _inspectorSampleReplyJustInnerXmlOfBody);
+
+                    if (!File.Exists(_inspectorSampleReplyJustInnerXmlOfBodyFullPath))
+                    {
+                        Assert.Fail("File location \"{0}\" does not exist", _inspectorSampleReplyJustInnerXmlOfBodyFullPath);
+                    }
+                }
+
+                return _inspectorSampleReplyJustInnerXmlOfBodyFullPath;
+            }
+        }
+
         private const string _loggerSampleRequest = @"TestData\Logger_01_SampleRequest.txt";
-        private const string _loggerSampleRequestJustInnerXmlOfBody = @"TestData\Logger_01_SampleRequest_JustInnerXmlOfBody.txt";
 
         private string _loggerSampleRequestFullPath;
 
@@ -203,6 +256,8 @@
                 return _loggerSampleRequestFullPath;
             }
         }
+
+        private const string _loggerSampleRequestJustInnerXmlOfBody = @"TestData\Logger_01_SampleRequest_JustInnerXmlOfBody.txt";
 
         private string _loggerSampleRequestJustInnerXmlOfBodyFullPath;
 

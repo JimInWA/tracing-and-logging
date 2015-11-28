@@ -180,6 +180,17 @@
             {
                 Assert.Fail("{0}", ex);
             }
+
+            // if you want to inspect the value logged in the table, stop the test at this point
+
+            var applicationName = TestHelperForTests.GetAppSettingsKey("SoapRequestsAndResponsesApplicationName");
+            const bool isRequest = false;
+            const bool isResponse = true;
+            var sqlSelectStatement = TestHelperForTests.BuildSqlSelectStatement(applicationName, isRequest, isResponse, Urn, methodName, messageTextFull);
+            const int expectedRowCount = 1;
+            var rowIdValue = TestHelperForTests.ExecuteSqlSelectStatement(sqlSelectStatement, expectedRowCount);
+            var sqlDeleteStatement = TestHelperForTests.BuildSqlDeleteStatement(rowIdValue);
+            TestHelperForTests.ExecuteSqlDeleteStatement(sqlDeleteStatement, expectedRowCount);
         }
 
         /// <summary>

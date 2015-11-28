@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System.Threading;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace SoapRequestAndResponseTracing.Test.Framework
 {
@@ -60,10 +61,12 @@ namespace SoapRequestAndResponseTracing.Test.Framework
         /// <param name="sqlSelectStatement"></param>
         /// <param name="expectedRowCount"></param>
         /// <returns></returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]
         public long ExecuteSqlSelectStatement(string sqlSelectStatement, int expectedRowCount)
         {
             long rowIdValue = 0;
+            var counter = 1;
+            const int retryCountMax = 5;
             var connection = ConfigurationManager.ConnectionStrings["SampleLoggingConnectionString"];
 
             using (var conn = new SqlConnection(connection.ConnectionString))
@@ -81,7 +84,25 @@ namespace SoapRequestAndResponseTracing.Test.Framework
 
                 if (!reader.HasRows)
                 {
-                    Assert.Fail("For the following select statement, there weren't any rows {0}{0}{1}", Environment.NewLine, sqlSelectStatement);
+                    while (counter < retryCountMax)
+                    {
+                        Thread.Sleep(1000);
+                        conn.Close();
+                        conn.Open();
+
+                        reader = cmd.ExecuteReader();
+                        counter++;
+
+                        if (reader.HasRows)
+                        {
+                            break;
+                        }
+                    }
+                }
+
+                if (!reader.HasRows)
+                {
+                    Assert.Fail("For the select statement listed below, there weren't any rows.  The select was attempted {0} times {1}{1}{2}", counter, Environment.NewLine, sqlSelectStatement);
                 }
 
                 var localRowCount = 0;

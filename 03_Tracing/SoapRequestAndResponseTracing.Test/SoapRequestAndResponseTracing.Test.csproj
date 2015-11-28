@@ -84,6 +84,12 @@
     <Content Include="TestData\DebugMessageDispatcher_02_SampleReply_JustInnerXmlOfBody.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="TestData\DebugMessageInspector_01_SampleRequest_JustInnerXmlOfBody.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\DebugMessageInspector_02_SampleReply_JustInnerXmlOfBody.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="TestData\Logger_01_SampleRequest.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
