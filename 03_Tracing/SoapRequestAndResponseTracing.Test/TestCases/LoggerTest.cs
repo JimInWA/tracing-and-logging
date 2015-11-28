@@ -2,6 +2,7 @@
 {
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using System;
+    using System.Data.SqlClient;
     using System.IO;
     using System.ServiceModel.Channels;
     using System.Xml;
@@ -26,6 +27,11 @@
         /// </summary>
         public Guid Urn;
 
+        /// <summary>
+        /// TestHelperForTests is the TestHelper used for the tests
+        /// </summary>
+        public TestHelper TestHelperForTests;
+
         #endregion
 
         #region Additional test attributes
@@ -37,6 +43,7 @@
         {
             Urn = Guid.NewGuid();
             LoggerForTests = new Logger();
+            TestHelperForTests = new TestHelper();
         }
         #endregion
 
@@ -52,8 +59,9 @@
             // Arrange
             const string methodName = "Logger_Log_Success";
             var uniqueId = new UniqueId(Urn);
-            var messageText = File.ReadAllText(DispatcherSampleRequestFullPathJustInnerXmlOfBody);
-            var xmlReader = XmlReader.Create(new StringReader(messageText));
+            var messageTextJustInnerXmlOfBody = File.ReadAllText(LoggerSampleRequestJustInnerXmlOfBodyFullPath);
+            var messageTextFull = File.ReadAllText(LoggerSampleRequestFullPath).Replace("Method_Name", methodName).Replace("urn:uuid:00000000-0000-0000-0000-000000000000", uniqueId.ToString());
+            var xmlReader = XmlReader.Create(new StringReader(messageTextJustInnerXmlOfBody));
 
             const string sourceType = "WCF Server Side";
             const string incomingRequestText = "incoming request";
@@ -77,22 +85,16 @@
 
             Assert.IsTrue(result, "Log method returned false");
 
-            var applicationName = "Tests";
-            var isRequest = true;
-            var isResponse = false;
-            var sql = BuildSqlStatement(applicationName, isRequest, isResponse, Urn, methodName, messageText);
+            // if you want to inspect the value logged in the table, stop the test at this point
 
-        }
-
-        private string BuildSqlStatement(string applicationName, bool isRequest, bool isResponse, Guid urn, string methodName, string messageText)
-        {
-            var isRequestBit = (isRequest) ? 1 : 0;
-            var isResponseBit = (isResponse) ? 1 : 0;
-
-            var soap = string.Format("<?xml version=\"1.0\" encoding=\"utf-8\"?><s:Envelope xmlns:a=\"http://www.w3.org/2005/08/addressing\" xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\"><s:Header><a:Action s:mustUnderstand=\"1\">{0}</a:Action><a:MessageID>urn:uuid:{1}</a:MessageID></s:Header><s:Body>{2}</s:Body></s:Envelope>", methodName, urn, messageText);
-
-            var sql = string.Format("select * from dbo.SoapRequestAndResponseTracingBase where ApplicationName = '{0}' and IsRequest = {1} and IsReply = {2} and URN_UUID = '{3}' and URL = '{4}' and SoapRequestOrResponseXml = '{5}'", applicationName, isRequestBit, isResponseBit, urn, methodName, soap);
-            return sql;
+            var applicationName = TestHelperForTests.GetAppSettingsKey("SoapRequestsAndResponsesApplicationName");
+            const bool isRequest = true;
+            const bool isResponse = false;
+            var sqlSelectStatement = TestHelperForTests.BuildSqlSelectStatement(applicationName, isRequest, isResponse, Urn, methodName, messageTextFull);
+            const int expectedRowCount = 1;
+            var rowIdValue = TestHelperForTests.ExecuteSqlSelectStatement(sqlSelectStatement, expectedRowCount);
+            var sqlDeleteStatement = TestHelperForTests.BuildSqlDeleteStatement(rowIdValue);
+            TestHelperForTests.ExecuteSqlDeleteStatement(sqlDeleteStatement, expectedRowCount);
         }
     }
 }

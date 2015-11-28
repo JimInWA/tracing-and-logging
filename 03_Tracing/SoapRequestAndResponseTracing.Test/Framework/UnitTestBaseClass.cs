@@ -26,7 +26,6 @@
 
         private const string _dispatcherSampleRequest = @"TestData\DebugMessageDispatcher_01_SampleRequest.txt";
         private const string _dispatcherSampleRequestJustInnerXmlOfBody = @"TestData\DebugMessageDispatcher_01_SampleRequest_JustInnerXmlOfBody.txt";
-        private const string _dispatcherSampleReply = @"TestData\DebugMessageDispatcher_02_SampleReply.txt";
 
         private string _dispatcherSampleRequestFullPath;
 
@@ -52,29 +51,32 @@
             }
         }
 
-        private string _dispatcherSampleRequestFullPathJustInnerXmlOfBody;
+        private string _dispatcherSampleRequestJustInnerXmlOfBodyFullPath;
 
         /// <summary>
-        /// DispatcherSampleRequestFullPathJustInnerXmlOfBody - get the full path of the request
+        /// DispatcherSampleRequestJustInnerXmlOfBodyFullPath - get the full path of the request
         /// </summary>
-        public string DispatcherSampleRequestFullPathJustInnerXmlOfBody
+        public string DispatcherSampleRequestJustInnerXmlOfBodyFullPath
         {
             get
             {
-                if (string.IsNullOrWhiteSpace(_dispatcherSampleRequestFullPathJustInnerXmlOfBody))
+                if (string.IsNullOrWhiteSpace(_dispatcherSampleRequestJustInnerXmlOfBodyFullPath))
                 {
                     // Get the current assembly location from the public property in the base class
-                    _dispatcherSampleRequestFullPathJustInnerXmlOfBody = Path.Combine(AssemblyDirectory.Replace(" ", "%"), _dispatcherSampleRequestJustInnerXmlOfBody);
+                    _dispatcherSampleRequestJustInnerXmlOfBodyFullPath = Path.Combine(AssemblyDirectory.Replace(" ", "%"), _dispatcherSampleRequestJustInnerXmlOfBody);
 
-                    if (!File.Exists(_dispatcherSampleRequestFullPathJustInnerXmlOfBody))
+                    if (!File.Exists(_dispatcherSampleRequestJustInnerXmlOfBodyFullPath))
                     {
-                        Assert.Fail("File location \"{0}\" does not exist", _dispatcherSampleRequestFullPathJustInnerXmlOfBody);
+                        Assert.Fail("File location \"{0}\" does not exist", _dispatcherSampleRequestJustInnerXmlOfBodyFullPath);
                     }
                 }
 
-                return _dispatcherSampleRequestFullPathJustInnerXmlOfBody;
+                return _dispatcherSampleRequestJustInnerXmlOfBodyFullPath;
             }
         }
+
+        private const string _dispatcherSampleReply = @"TestData\DebugMessageDispatcher_02_SampleReply.txt";
+        private const string _dispatcherSampleReplyJustInnerXmlOfBody = @"TestData\DebugMessageDispatcher_02_SampleReply_JustInnerXmlOfBody.txt";
 
         private string _dispatcherSampleReplyFullPath;
 
@@ -97,6 +99,30 @@
                 }
 
                 return _dispatcherSampleReplyFullPath;
+            }
+        }
+
+        private string _dispatcherSampleReplyJustInnerXmlOfBodyFullPath;
+
+        /// <summary>
+        /// DispatcherSampleReplyJustInnerXmlOfBodyFullPath - get the full path of the reply
+        /// </summary>
+        public string DispatcherSampleReplyJustInnerXmlOfBodyFullPath
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(_dispatcherSampleReplyJustInnerXmlOfBodyFullPath))
+                {
+                    // Get the current assembly location from the public property in the base class
+                    _dispatcherSampleReplyJustInnerXmlOfBodyFullPath = Path.Combine(AssemblyDirectory.Replace(" ", "%"), _dispatcherSampleReplyJustInnerXmlOfBody);
+
+                    if (!File.Exists(_dispatcherSampleReplyJustInnerXmlOfBodyFullPath))
+                    {
+                        Assert.Fail("File location \"{0}\" does not exist", _dispatcherSampleReplyJustInnerXmlOfBodyFullPath);
+                    }
+                }
+
+                return _dispatcherSampleReplyJustInnerXmlOfBodyFullPath;
             }
         }
 
@@ -150,6 +176,58 @@
                 return _inspectorSampleReplyFullPath;
             }
         }
+
+        private const string _loggerSampleRequest = @"TestData\Logger_01_SampleRequest.txt";
+        private const string _loggerSampleRequestJustInnerXmlOfBody = @"TestData\Logger_01_SampleRequest_JustInnerXmlOfBody.txt";
+
+        private string _loggerSampleRequestFullPath;
+
+        /// <summary>
+        /// LoggerSampleRequestFullPath - get the full path of the request
+        /// </summary>
+        public string LoggerSampleRequestFullPath
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(_loggerSampleRequestFullPath))
+                {
+                    // Get the current assembly location from the public property in the base class
+                    _loggerSampleRequestFullPath = Path.Combine(AssemblyDirectory.Replace(" ", "%"), _loggerSampleRequest);
+
+                    if (!File.Exists(_loggerSampleRequestFullPath))
+                    {
+                        Assert.Fail("File location \"{0}\" does not exist", _loggerSampleRequestFullPath);
+                    }
+                }
+
+                return _loggerSampleRequestFullPath;
+            }
+        }
+
+        private string _loggerSampleRequestJustInnerXmlOfBodyFullPath;
+
+        /// <summary>
+        /// LoggerSampleRequestJustInnerXmlOfBodyFullPath - get the full path of the request
+        /// </summary>
+        public string LoggerSampleRequestJustInnerXmlOfBodyFullPath
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(_loggerSampleRequestJustInnerXmlOfBodyFullPath))
+                {
+                    // Get the current assembly location from the public property in the base class
+                    _loggerSampleRequestJustInnerXmlOfBodyFullPath = Path.Combine(AssemblyDirectory.Replace(" ", "%"), _loggerSampleRequestJustInnerXmlOfBody);
+
+                    if (!File.Exists(_loggerSampleRequestJustInnerXmlOfBodyFullPath))
+                    {
+                        Assert.Fail("File location \"{0}\" does not exist", _loggerSampleRequestJustInnerXmlOfBody);
+                    }
+                }
+
+                return _loggerSampleRequestJustInnerXmlOfBodyFullPath;
+            }
+        }
+
 
     }
 }
