@@ -78,6 +78,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="TestData\DebugMessageDispatcher_01_SampleRequest_JustInnerXmlOfBody.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="TestData\DebugMessageDispatcher_02_SampleReply.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

@@ -25,6 +25,7 @@
         }
 
         private const string _dispatcherSampleRequest = @"TestData\DebugMessageDispatcher_01_SampleRequest.txt";
+        private const string _dispatcherSampleRequestJustInnerXmlOfBody = @"TestData\DebugMessageDispatcher_01_SampleRequest_JustInnerXmlOfBody.txt";
         private const string _dispatcherSampleReply = @"TestData\DebugMessageDispatcher_02_SampleReply.txt";
 
         private string _dispatcherSampleRequestFullPath;
@@ -43,11 +44,35 @@
 
                     if (!File.Exists(_dispatcherSampleRequestFullPath))
                     {
-                        Assert.Fail("File location \"{0}\" does not exist");
+                        Assert.Fail("File location \"{0}\" does not exist", _dispatcherSampleRequestFullPath);
                     }
                 }
 
                 return _dispatcherSampleRequestFullPath;
+            }
+        }
+
+        private string _dispatcherSampleRequestFullPathJustInnerXmlOfBody;
+
+        /// <summary>
+        /// DispatcherSampleRequestFullPathJustInnerXmlOfBody - get the full path of the request
+        /// </summary>
+        public string DispatcherSampleRequestFullPathJustInnerXmlOfBody
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(_dispatcherSampleRequestFullPathJustInnerXmlOfBody))
+                {
+                    // Get the current assembly location from the public property in the base class
+                    _dispatcherSampleRequestFullPathJustInnerXmlOfBody = Path.Combine(AssemblyDirectory.Replace(" ", "%"), _dispatcherSampleRequestJustInnerXmlOfBody);
+
+                    if (!File.Exists(_dispatcherSampleRequestFullPathJustInnerXmlOfBody))
+                    {
+                        Assert.Fail("File location \"{0}\" does not exist", _dispatcherSampleRequestFullPathJustInnerXmlOfBody);
+                    }
+                }
+
+                return _dispatcherSampleRequestFullPathJustInnerXmlOfBody;
             }
         }
 
@@ -67,7 +92,7 @@
 
                     if (!File.Exists(_dispatcherSampleReplyFullPath))
                     {
-                        Assert.Fail("File location \"{0}\" does not exist");
+                        Assert.Fail("File location \"{0}\" does not exist", _dispatcherSampleReplyFullPath);
                     }
                 }
 
@@ -94,7 +119,7 @@
 
                     if (!File.Exists(_inspectorSampleRequestFullPath))
                     {
-                        Assert.Fail("File location \"{0}\" does not exist");
+                        Assert.Fail("File location \"{0}\" does not exist", _inspectorSampleRequestFullPath);
                     }
                 }
 
@@ -118,7 +143,7 @@
 
                     if (!File.Exists(_inspectorSampleReplyFullPath))
                     {
-                        Assert.Fail("File location \"{0}\" does not exist");
+                        Assert.Fail("File location \"{0}\" does not exist", _inspectorSampleReplyFullPath);
                     }
                 }
 

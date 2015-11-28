@@ -10,7 +10,6 @@
     using System.Xml;
     using SoapRequestAndResponseTracing.Interfaces;
 
-
     /// <summary>
     /// Logger class - implements ILogger interface
     /// Methods for logging the request and response
@@ -175,7 +174,7 @@
                     var isRequest = false;
                     var isReply = false;
 
-                    var comparisonText = stepName.ToString().ToLower();
+                    var comparisonText = stepName.ToLower();
 
                     if (comparisonText.Contains("request"))
                     {

@@ -1,0 +1,1 @@
+<AddTwoNumbers xmlns="http://tempuri.org/"><valueA>3</valueA><valueB>3</valueB></AddTwoNumbers>
