@@ -9,48 +9,78 @@
     using SoapRequestAndResponseTracing;
     using SoapRequestAndResponseTracing.Test.Framework;
 
-
     /// <summary>
     /// DebugMessageDispatcher tests
     /// </summary>
     [TestClass]
     public class DebugMessageDispatcherTest : UnitTestBaseClass
     {
+        #region Test attributes
+
         /// <summary>
-        /// DebugMessageDispatcher_BeforeSendRequest_Success
+        /// DebugMessageDispatcherForTests is the DebugMessageDispatcher used for the tests
+        /// </summary>
+        public DebugMessageDispatcher DebugMessageDispatcherForTests;
+
+        /// <summary>
+        /// Urn is a Guid used for each test
+        /// </summary>
+        public Guid Urn;
+
+        #endregion
+
+        #region Additional test attributes
+        /// <summary>
+        /// Use TestInitialize to run code before running each test
+        /// </summary>
+        [TestInitialize()]
+        public void MyTestInitialize()
+        {
+            Urn = Guid.NewGuid(); 
+            var myHelper = new Helper();
+            var myLogger = new Logger();
+            DebugMessageDispatcherForTests = new DebugMessageDispatcher(myHelper, myLogger);
+        }
+        #endregion
+
+        
+        /// <summary>
+        /// DebugMessageDispatcher_AfterReceiveRequest_Success
         /// </summary>
         [TestMethod]
         [TestCategory("IntegrationTest")]
         [TestCategory("HappyPath")]
         [TestCategory("DebugMessageDispatcher")]
-        public void DebugMessageDispatcher_BeforeSendRequest_Success()
+        public void DebugMessageDispatcher_AfterReceiveRequest_Success()
         {
             // Arrange
-            var messageText = File.ReadAllText(DispatcherSampleRequestFullPath);
-
-            // Create the Message
-            var expectedMessage = Message.CreateMessage(MessageVersion.Default, "*", XmlTextReader.Create(new StringReader(messageText)));
-
-            // ToDo: introduce FakeItEasy so we convert this into a unit test
-            // ToDo: Autofac with FakeItEasy
-
-            // Act
-            var myHelper = new Helper();
-            var myLogger = new Logger();
-            var myDebugMessageDispatcher = new DebugMessageDispatcher(myHelper, myLogger);
+            const string methodName = "DebugMessageDispatcher_AfterReceiveRequest_Success";
+            var uniqueId = new UniqueId(Urn);
             IClientChannel channel = null;
             InstanceContext context = null;
+            var messageText = File.ReadAllText(DispatcherSampleRequestFullPath).Replace("urn:uuid:00000000-0000-0000-0000-000000000000", uniqueId.ToString());
+            var xmlReader = XmlReader.Create(new StringReader(messageText));
+
+            // Create the Message
+            var expectedMessage = Message.CreateMessage(MessageVersion.Soap11WSAddressing10, methodName, xmlReader);
+
+            // Because this is the incoming request, set MessageId
+            expectedMessage.Headers.MessageId = uniqueId;
+
+            // Act
             try
             {
                 // Note: If the SoapRequestsAndResponsesShouldLog in test project App.config is true, then the value should be logged to the DB
                 // However, since we are using TPL (Task Parallel Library) Task.Factory.StartNew, the below call will finish before the item is
                 // actually logged to the DB
-                var actualMessage = myDebugMessageDispatcher.AfterReceiveRequest(ref expectedMessage, channel, context);
+                var actualMessage = DebugMessageDispatcherForTests.AfterReceiveRequest(ref expectedMessage, channel, context);
             }
             catch (Exception ex)
             {
                 Assert.Fail("{0}", ex);
             }
+
+
         }
 
         /// <summary>
@@ -63,24 +93,23 @@
         public void DebugMessageDispatcher_StartLoggingTheRequest_Success()
         {
             // Arrange
-            var messageText = File.ReadAllText(DispatcherSampleRequestFullPath);
+            const string methodName = "DebugMessageDispatcher_StartLoggingTheRequest_Success";
+            var uniqueId = new UniqueId(Urn);
+            var messageText = File.ReadAllText(DispatcherSampleRequestFullPath).Replace("urn:uuid:00000000-0000-0000-0000-000000000000", uniqueId.ToString());
+            var xmlReader = XmlReader.Create(new StringReader(messageText));
 
             // Create the Message
-            var expectedMessage = Message.CreateMessage(MessageVersion.Default, "*", XmlTextReader.Create(new StringReader(messageText)));
+            var expectedMessage = Message.CreateMessage(MessageVersion.Soap11WSAddressing10, methodName, xmlReader);
 
-            // ToDo: introduce FakeItEasy so we convert this into a unit test
-            // ToDo: Autofac with FakeItEasy
+            // Because this is the incoming request, set MessageId
+            expectedMessage.Headers.MessageId = uniqueId;
 
-            // Act
-            var myHelper = new Helper();
-            var myLogger = new Logger();
-            var myDebugMessageDispatcher = new DebugMessageDispatcher(myHelper, myLogger);
             try
             {
                 // Note: If the SoapRequestsAndResponsesShouldLog in test project App.config is true, then the value should be logged to the DB
                 // However, since we are using TPL (Task Parallel Library) Task.Factory.StartNew, the below call will finish before the item is
                 // actually logged to the DB
-                myDebugMessageDispatcher.StartLoggingTheRequest(expectedMessage);
+                DebugMessageDispatcherForTests.StartLoggingTheRequest(expectedMessage);
             }
             catch (Exception ex)
             {
@@ -89,34 +118,34 @@
         }
 
         /// <summary>
-        /// DebugMessageDispatcher_AfterReceiveReply_Success
+        /// DebugMessageDispatcher_BeforeSendReply_Success
         /// </summary>
         [TestMethod]
         [TestCategory("IntegrationTest")]
         [TestCategory("HappyPath")]
         [TestCategory("DebugMessageDispatcher")]
-        public void DebugMessageDispatcher_AfterReceiveReply_Success()
+        public void DebugMessageDispatcher_BeforeSendReply_Success()
         {
             // Arrange
-            var messageText = File.ReadAllText(DispatcherSampleReplyFullPath);
+            const string methodName = "DebugMessageDispatcher_BeforeSendReply_Success";
+            var uniqueId = new UniqueId(Urn);
+            object myCorrelationState = null;
+            var messageText = File.ReadAllText(DispatcherSampleReplyFullPath).Replace("urn:uuid:00000000-0000-0000-0000-000000000000", uniqueId.ToString());
+            var xmlReader = XmlReader.Create(new StringReader(messageText));
 
             // Create the Message
-            var expectedMessage = Message.CreateMessage(MessageVersion.Default, "*", XmlTextReader.Create(new StringReader(messageText)));
+            var expectedMessage = Message.CreateMessage(MessageVersion.Soap11WSAddressing10, methodName, xmlReader);
 
-            // ToDo: introduce FakeItEasy so we convert this into a unit test
-            // ToDo: Autofac with FakeItEasy
+            // Because this is the outgoing reply, set RelatesTo
+            expectedMessage.Headers.RelatesTo = uniqueId;
 
             // Act
-            var myHelper = new Helper();
-            var myLogger = new Logger();
-            var myDebugMessageDispatcher = new DebugMessageDispatcher(myHelper, myLogger);
-            object myCorrelationState = null;
             try
             {
                 // Note: If the SoapRequestsAndResponsesShouldLog in test project App.config is true, then the value should be logged to the DB
                 // However, since we are using TPL (Task Parallel Library) Task.Factory.StartNew, the below call will finish before the item is
                 // actually logged to the DB
-                myDebugMessageDispatcher.BeforeSendReply(ref expectedMessage, myCorrelationState);
+                DebugMessageDispatcherForTests.BeforeSendReply(ref expectedMessage, myCorrelationState);
             }
             catch(Exception ex)
             {
@@ -134,24 +163,24 @@
         public void DebugMessageDispatcher_StartLoggingTheReply_Success()
         {
             // Arrange
-            var messageText = File.ReadAllText(DispatcherSampleReplyFullPath);
+            const string methodName = "DebugMessageDispatcher_StartLoggingTheReply_Success";
+            var uniqueId = new UniqueId(Urn);
+            var messageText = File.ReadAllText(DispatcherSampleReplyFullPath).Replace("urn:uuid:00000000-0000-0000-0000-000000000000", uniqueId.ToString());
+            var xmlReader = XmlReader.Create(new StringReader(messageText));
 
             // Create the Message
-            var expectedMessage = Message.CreateMessage(MessageVersion.Default, "*", XmlTextReader.Create(new StringReader(messageText)));
+            var expectedMessage = Message.CreateMessage(MessageVersion.Soap11WSAddressing10, methodName, xmlReader);
 
-            // ToDo: introduce FakeItEasy so we convert this into a unit test
-            // ToDo: Autofac with FakeItEasy
+            // Because this is the outgoing reply, set RelatesTo
+            expectedMessage.Headers.RelatesTo = uniqueId;
 
             // Act
-            var myHelper = new Helper();
-            var myLogger = new Logger();
-            var myDebugMessageDispatcher = new DebugMessageDispatcher(myHelper, myLogger);
             try
             {
                 // Note: If the SoapRequestsAndResponsesShouldLog in test project App.config is true, then the value should be logged to the DB
                 // However, since we are using TPL (Task Parallel Library) Task.Factory.StartNew, the below call will finish before the item is
                 // actually logged to the DB
-                myDebugMessageDispatcher.StartLoggingTheReply(expectedMessage);
+                DebugMessageDispatcherForTests.StartLoggingTheReply(expectedMessage);
             }
             catch (Exception ex)
             {
