@@ -95,7 +95,6 @@
                     Directory.CreateDirectory(folderName);
                 }
 
-                // ToDo: Get rid of the magic strings
                 var configSetting = ConfigurationManager.AppSettings[_appSettingSoapRequestsAndResponsesFolder];
                 if (!string.IsNullOrWhiteSpace(configSetting))
                 {
@@ -104,7 +103,6 @@
 
                 var fileName = string.Empty;
 
-                // ToDo: Get rid of the magic strings
                 switch (sourceType)
                 {
                     case _wcfServerSide:
@@ -165,17 +163,14 @@
 
             try
             {
-                // ToDo: Get rid of the magic strings
                 var applicationName = sourceType;
 
-                // ToDo: Get rid of the magic strings
                 var configSetting = ConfigurationManager.AppSettings[_appSettingSoapRequestsAndResponsesApplicationName];
                 if (!string.IsNullOrWhiteSpace(configSetting))
                 {
                     applicationName = configSetting;
                 }
 
-                // ToDo: Get rid of the magic strings
                 var connection = ConfigurationManager.ConnectionStrings[_connectionStringSampleLoggingConnectionString];
 
                 using (var conn = new SqlConnection(connection.ConnectionString))
