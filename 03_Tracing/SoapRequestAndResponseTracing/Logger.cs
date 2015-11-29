@@ -16,6 +16,16 @@
     /// </summary>
     public class Logger : ILogger
     {
+        private const string _folderPathTempFolder = @"c:\Temp";
+        private const string _appSettingSoapRequestsAndResponsesFolder = "SoapRequestsAndResponsesFolder";
+        private const string _wcfServerSide = "WCF Server Side";
+        private const string _wcfServerFile = "WCF_Server_Side_Log_File.log";
+        private const string _mvcClientFile = "MVC_Client_Side_Log_File.log";
+        private const string _mvcClientSide = "MVC Client Side";
+        private const string _mvcUnknownFile = "Unknown_Log_File.log";
+        private const string _appSettingSoapRequestsAndResponsesApplicationName = "SoapRequestsAndResponsesApplicationName";
+        private const string _connectionStringSampleLoggingConnectionString = "SampleLoggingConnectionString";
+
         /// <summary>
         /// Log method - orchestrates the logging of the request or response
         /// </summary>
@@ -79,15 +89,14 @@
 
             try
             {
-                // ToDo: Get rid of the magic strings
-                var folderName = @"c:\Temp";
+                var folderName = _folderPathTempFolder;
                 if (!Directory.Exists(folderName))
                 {
                     Directory.CreateDirectory(folderName);
                 }
 
                 // ToDo: Get rid of the magic strings
-                var configSetting = ConfigurationManager.AppSettings["SoapRequestsAndResponsesFolder"];
+                var configSetting = ConfigurationManager.AppSettings[_appSettingSoapRequestsAndResponsesFolder];
                 if (!string.IsNullOrWhiteSpace(configSetting))
                 {
                     folderName = configSetting;
@@ -98,22 +107,22 @@
                 // ToDo: Get rid of the magic strings
                 switch (sourceType)
                 {
-                    case "WCF Server Side":
-                        fileName = "WCF_Server_Side_Log_File.log";
+                    case _wcfServerSide:
+                        fileName = _wcfServerFile;
                         break;
 
-                    case "MVC Client Side":
-                        fileName = "MVC_Client_Side_Log_File.log";
+                    case _mvcClientSide:
+                        fileName = _mvcClientFile;
                         break;
 
                     default:
-                        fileName = "Unknown_Log_File.log";
+                        fileName = _mvcUnknownFile;
                         break;
                 }
 
                 var pathString = Path.Combine(folderName, fileName);
 
-                if (!System.IO.File.Exists(pathString))
+                if (!File.Exists(pathString))
                 {
                     using (var myFile = File.Create(pathString))
                     {
@@ -160,14 +169,14 @@
                 var applicationName = sourceType;
 
                 // ToDo: Get rid of the magic strings
-                var configSetting = ConfigurationManager.AppSettings["SoapRequestsAndResponsesApplicationName"];
+                var configSetting = ConfigurationManager.AppSettings[_appSettingSoapRequestsAndResponsesApplicationName];
                 if (!string.IsNullOrWhiteSpace(configSetting))
                 {
                     applicationName = configSetting;
                 }
 
                 // ToDo: Get rid of the magic strings
-                var connection = ConfigurationManager.ConnectionStrings["SampleLoggingConnectionString"];
+                var connection = ConfigurationManager.ConnectionStrings[_connectionStringSampleLoggingConnectionString];
 
                 using (var conn = new SqlConnection(connection.ConnectionString))
                 {

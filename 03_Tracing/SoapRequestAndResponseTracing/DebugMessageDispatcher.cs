@@ -15,6 +15,10 @@
         private readonly IHelper _helper;
         private readonly ILogger _logger;
 
+        private const string _incomingRequestText = "incoming request";
+        private const string _wcfServerSide = "WCF Server Side";
+        private const string _outgoingReplyText = "outgoing reply";
+
         /// <summary>
         /// DebugMessageDispatcher constructor
         /// </summary>
@@ -67,12 +71,9 @@
             {
                 if (_helper.ShouldLogSoapRequestsAndResponses())
                 {
-                    // ToDo: Get rid of the magic strings
-                    const string incomingRequestText = "incoming request";
-
                     var urn = _helper.ProvideUrnFromHeaderMessageId(requestCopyForLogging.Headers.MessageId);
 
-                    result = _logger.Log("WCF Server Side", incomingRequestText, urn, requestCopyForLogging);
+                    result = _logger.Log(_wcfServerSide, _incomingRequestText, urn, requestCopyForLogging);
                 }
             }
             catch
@@ -123,12 +124,9 @@
             {
                 if (_helper.ShouldLogSoapRequestsAndResponses())
                 {
-                    // ToDo: Get rid of the magic strings
-                    const string outgoingReplyText = "outgoing reply";
-
                     var urn = _helper.ProvideUrnFromHeaderRelatesTo(replyCopyForLogging.Headers.RelatesTo);
 
-                    result = _logger.Log("WCF Server Side", outgoingReplyText, urn, replyCopyForLogging);
+                    result = _logger.Log(_wcfServerSide, _outgoingReplyText, urn, replyCopyForLogging);
                 }
             }
             catch

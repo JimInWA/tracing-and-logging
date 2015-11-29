@@ -15,6 +15,10 @@
         private readonly IHelper _helper;
         private readonly ILogger _logger;
 
+        private const string _outgoingRequestText = "outgoing request";
+        private const string _mvcClientSide = "MVC Client Side";
+        private const string _incomingReplyText = "incoming reply";
+
         /// <summary>
         /// DebugMessageInspector constructor
         /// </summary>
@@ -66,12 +70,9 @@
             {
                 if (_helper.ShouldLogSoapRequestsAndResponses())
                 {
-                    // ToDo: Get rid of the magic strings
-                    const string outgoingRequestText = "outgoing request";
-
                     var urn = _helper.ProvideUrnFromHeaderMessageId(requestCopyForLogging.Headers.MessageId);
 
-                    result = _logger.Log("MVC Client Side", outgoingRequestText, urn, requestCopyForLogging);
+                    result = _logger.Log(_mvcClientSide, _outgoingRequestText, urn, requestCopyForLogging);
                 }
             }
             catch
@@ -122,12 +123,9 @@
             {
                 if (_helper.ShouldLogSoapRequestsAndResponses())
                 {
-                    // ToDo: Get rid of the magic strings
-                    const string incomingReplyText = "incoming reply";
-
                     var urn = _helper.ProvideUrnFromHeaderRelatesTo(replyCopyForLogging.Headers.RelatesTo);
 
-                    result = _logger.Log("MVC Client Side", incomingReplyText, urn, replyCopyForLogging);
+                    result = _logger.Log(_mvcClientSide, _incomingReplyText, urn, replyCopyForLogging);
                 }
             }
             catch

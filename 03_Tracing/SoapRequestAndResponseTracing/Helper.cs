@@ -11,6 +11,8 @@
     /// </summary>
     public class Helper : IHelper
     {
+        private const string _appSettingSoapRequestsAndResponsesShouldLog = "SoapRequestsAndResponsesShouldLog";
+
         /// <summary>
         /// ShouldLogSoapRequestsAndResponses method - reads the config to determine if we should log or not
         /// </summary>
@@ -19,8 +21,7 @@
         {
             var shouldLogSoapRequestsAndResponses = false;
 
-            // ToDo: Get rid of the magic strings
-            var configSetting = ConfigurationManager.AppSettings["SoapRequestsAndResponsesShouldLog"];
+            var configSetting = ConfigurationManager.AppSettings[_appSettingSoapRequestsAndResponsesShouldLog];
             if (!string.IsNullOrWhiteSpace(configSetting))
             {
                 bool.TryParse(configSetting, out shouldLogSoapRequestsAndResponses);
