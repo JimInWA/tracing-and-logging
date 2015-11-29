@@ -47,9 +47,9 @@
                 // Using Task.Factory.StartNew instead
                 Task.Factory.StartNew(() => StartLoggingTheRequest(requestCopyForLogging));
             }
-            catch
+            catch (Exception ex)
             {
-                // ToDo: Log an issue to the event log
+                _logger.Write(ex);
                 throw;
             }
 
@@ -75,9 +75,9 @@
                     result = _logger.Log(_mvcClientSide, _outgoingRequestText, urn, requestCopyForLogging);
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                // ToDo: Log an issue to the event log
+                _logger.Write(ex);
                 throw;
             }
 
@@ -102,9 +102,9 @@
                 // Using Task.Factory.StartNew instead
                 Task.Factory.StartNew(() => StartLoggingTheReply(replyCopyForLogging)); ;
             }
-            catch
+            catch (Exception ex)
             {
-                // ToDo: Log an issue to the event log
+                _logger.Write(ex);
                 throw;
             }
         }
@@ -128,10 +128,10 @@
                     result = _logger.Log(_mvcClientSide, _incomingReplyText, urn, replyCopyForLogging);
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                _logger.Write(ex);
                 throw;
-                // ToDo: Log an issue to the event log
             }
 
             return result;

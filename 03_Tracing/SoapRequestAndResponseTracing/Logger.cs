@@ -1,10 +1,15 @@
 ﻿namespace SoapRequestAndResponseTracing
 {
+    using Microsoft.Practices.EnterpriseLibrary.Common.Configuration;
+    using Microsoft.Practices.EnterpriseLibrary.Logging;
     using System;
+    using System.Collections.ObjectModel;
     using System.Configuration;
     using System.Data;
     using System.Data.SqlClient;
+    using System.Diagnostics;
     using System.IO;
+    using System.Net;
     using System.ServiceModel.Channels;
     using System.Text;
     using System.Xml;
@@ -26,8 +31,40 @@
         private const string _appSettingSoapRequestsAndResponsesApplicationName = "SoapRequestsAndResponsesApplicationName";
         private const string _connectionStringSampleLoggingConnectionString = "SampleLoggingConnectionString";
 
+
+        private readonly LogWriter _logWriter;
+        private readonly string _machineName;
+
         /// <summary>
-        /// Log method - orchestrates the logging of the request or response
+        /// 
+        /// </summary>
+        public Logger()
+        {
+            _logWriter = EnterpriseLibraryContainer.Current.GetInstance<LogWriter>();
+            _machineName = Dns.GetHostName();
+        }
+
+        /// <summary>
+        /// Write a new log entry to the default category (uses Microsoft.Practices.EnterpriseLibrary.Logging)
+        /// </summary>
+        /// <param name="message">Message body to log. Value from ToString() method from message object</param>
+        public void Write(object message)
+        {
+            var logEntry = new LogEntry
+            {
+                Message = message.ToString(),
+                Categories = new Collection<string> { "General" },
+                MachineName = _machineName,
+                Severity = TraceEventType.Error,
+                TimeStamp = DateTime.Now,
+                Priority = 1
+            };
+
+            _logWriter.Write(logEntry);
+        }
+        
+        /// <summary>
+        /// Log method - orchestrates the logging of the request or response (using inline SQL statements)
         /// </summary>
         /// <param name="sourceType"></param>
         /// <param name="stepName"></param>
@@ -36,7 +73,7 @@
         /// <returns></returns>
         public bool Log(string sourceType, string stepName, Guid urnUuid, Message message)
         {
-            var result = false;
+            bool result;
 
             try
             {
@@ -58,9 +95,9 @@
                 // Log the contents of xmlDoc to the database
                 result = LogToDatabase(sourceType, stepName, urnUuid, uri, myXmlDocument);
             }
-            catch
+            catch (Exception ex)
             {
-                // ToDo: Log an issue to the event log
+                Write(ex);
                 throw;
             }
 
@@ -147,11 +184,10 @@
 
                 result = true;
             }
-            catch
+            catch (Exception ex)
             {
-                // empty catch block for right now
-
-                // ToDo: Log the issue to the event log
+                Write(ex);
+                throw;
             }
 
             return result;
@@ -222,11 +258,10 @@
             }
             catch (Exception ex)
             {
-                var message = ex.Message;
+                Write(ex);
+
                 // When an exception happens, log to the file
                 LogToFile(sourceType, stepName, urnUuid, uri, xmlDocument);
-
-                // ToDo: Log the issue to the event log
             }
 
             return result;

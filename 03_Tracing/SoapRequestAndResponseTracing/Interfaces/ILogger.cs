@@ -1,5 +1,6 @@
 ﻿namespace SoapRequestAndResponseTracing.Interfaces
 {
+    using Microsoft.Practices.EnterpriseLibrary.Logging;
     using System;
     using System.ServiceModel.Channels;
 
@@ -10,7 +11,13 @@
     public interface ILogger
     {
         /// <summary>
-        /// Log method stub - orchestrates the logging of the request or response
+        /// Write a new log entry to the default category (uses Microsoft.Practices.EnterpriseLibrary.Logging)
+        /// </summary>
+        /// <param name="message">Message body to log. Value from ToString() method from message object</param>
+        void Write(object message);
+        
+        /// <summary>
+        /// Log method stub - orchestrates the logging of the request or response (using inline SQL statements)
         /// </summary>
         /// <param name="sourceType"></param>
         /// <param name="stepName"></param>
