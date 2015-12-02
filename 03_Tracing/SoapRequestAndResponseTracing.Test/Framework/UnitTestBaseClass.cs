@@ -282,7 +282,5 @@
                 return _loggerSampleRequestJustInnerXmlOfBodyFullPath;
             }
         }
-
-
     }
 }

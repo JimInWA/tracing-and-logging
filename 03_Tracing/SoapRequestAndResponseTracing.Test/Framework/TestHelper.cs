@@ -1,12 +1,11 @@
-﻿using System.Threading;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
-namespace SoapRequestAndResponseTracing.Test.Framework
+﻿namespace SoapRequestAndResponseTracing.Test.Framework
 {
+	using Microsoft.VisualStudio.TestTools.UnitTesting;
     using System;
     using System.Configuration;
     using System.Data;
     using System.Data.SqlClient;
+	using System.Threading;
 
     /// <summary>
     /// Provides helper methods for the tests
