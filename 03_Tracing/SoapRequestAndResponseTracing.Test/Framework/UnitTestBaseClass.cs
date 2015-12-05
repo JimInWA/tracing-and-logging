@@ -39,7 +39,7 @@
                 if (string.IsNullOrWhiteSpace(_dispatcherSampleRequestFullPath))
                 {
                     // Get the current assembly location from the public property in the base class
-                    _dispatcherSampleRequestFullPath = Path.Combine(AssemblyDirectory.Replace(" ", "%"), _dispatcherSampleRequest);
+                    _dispatcherSampleRequestFullPath = Path.Combine(AssemblyDirectory, _dispatcherSampleRequest);
 
                     if (!File.Exists(_dispatcherSampleRequestFullPath))
                     {
@@ -63,7 +63,7 @@
                 if (string.IsNullOrWhiteSpace(_dispatcherSampleRequestJustInnerXmlOfBodyFullPath))
                 {
                     // Get the current assembly location from the public property in the base class
-                    _dispatcherSampleRequestJustInnerXmlOfBodyFullPath = Path.Combine(AssemblyDirectory.Replace(" ", "%"), _dispatcherSampleRequestJustInnerXmlOfBody);
+                    _dispatcherSampleRequestJustInnerXmlOfBodyFullPath = Path.Combine(AssemblyDirectory, _dispatcherSampleRequestJustInnerXmlOfBody);
 
                     if (!File.Exists(_dispatcherSampleRequestJustInnerXmlOfBodyFullPath))
                     {
@@ -89,7 +89,7 @@
                 if (string.IsNullOrWhiteSpace(_dispatcherSampleReplyFullPath))
                 {
                     // Get the current assembly location from the public property in the base class
-                    _dispatcherSampleReplyFullPath = Path.Combine(AssemblyDirectory.Replace(" ", "%"), _dispatcherSampleReply);
+                    _dispatcherSampleReplyFullPath = Path.Combine(AssemblyDirectory, _dispatcherSampleReply);
 
                     if (!File.Exists(_dispatcherSampleReplyFullPath))
                     {
@@ -115,7 +115,7 @@
                 if (string.IsNullOrWhiteSpace(_dispatcherSampleReplyJustInnerXmlOfBodyFullPath))
                 {
                     // Get the current assembly location from the public property in the base class
-                    _dispatcherSampleReplyJustInnerXmlOfBodyFullPath = Path.Combine(AssemblyDirectory.Replace(" ", "%"), _dispatcherSampleReplyJustInnerXmlOfBody);
+                    _dispatcherSampleReplyJustInnerXmlOfBodyFullPath = Path.Combine(AssemblyDirectory, _dispatcherSampleReplyJustInnerXmlOfBody);
 
                     if (!File.Exists(_dispatcherSampleReplyJustInnerXmlOfBodyFullPath))
                     {
@@ -141,7 +141,7 @@
                 if (string.IsNullOrWhiteSpace(_inspectorSampleRequestFullPath))
                 {
                     // Get the current assembly location from the public property in the base class
-                    _inspectorSampleRequestFullPath = Path.Combine(AssemblyDirectory.Replace(" ", "%"), _inspectorSampleRequest);
+                    _inspectorSampleRequestFullPath = Path.Combine(AssemblyDirectory, _inspectorSampleRequest);
 
                     if (!File.Exists(_inspectorSampleRequestFullPath))
                     {
@@ -167,7 +167,7 @@
                 if (string.IsNullOrWhiteSpace(_inspectorSampleRequestJustInnerXmlOfBodyFullPath))
                 {
                     // Get the current assembly location from the public property in the base class
-                    _inspectorSampleRequestJustInnerXmlOfBodyFullPath = Path.Combine(AssemblyDirectory.Replace(" ", "%"), _inspectorSampleRequestJustInnerXmlOfBody);
+                    _inspectorSampleRequestJustInnerXmlOfBodyFullPath = Path.Combine(AssemblyDirectory, _inspectorSampleRequestJustInnerXmlOfBody);
 
                     if (!File.Exists(_inspectorSampleRequestJustInnerXmlOfBodyFullPath))
                     {
@@ -193,7 +193,7 @@
                 if (string.IsNullOrWhiteSpace(_inspectorSampleReplyFullPath))
                 {
                     // Get the current assembly location from the public property in the base class
-                    _inspectorSampleReplyFullPath = Path.Combine(AssemblyDirectory.Replace(" ", "%"), _inspectorSampleReply);
+                    _inspectorSampleReplyFullPath = Path.Combine(AssemblyDirectory, _inspectorSampleReply);
 
                     if (!File.Exists(_inspectorSampleReplyFullPath))
                     {
@@ -219,7 +219,7 @@
                 if (string.IsNullOrWhiteSpace(_inspectorSampleReplyJustInnerXmlOfBodyFullPath))
                 {
                     // Get the current assembly location from the public property in the base class
-                    _inspectorSampleReplyJustInnerXmlOfBodyFullPath = Path.Combine(AssemblyDirectory.Replace(" ", "%"), _inspectorSampleReplyJustInnerXmlOfBody);
+                    _inspectorSampleReplyJustInnerXmlOfBodyFullPath = Path.Combine(AssemblyDirectory, _inspectorSampleReplyJustInnerXmlOfBody);
 
                     if (!File.Exists(_inspectorSampleReplyJustInnerXmlOfBodyFullPath))
                     {
@@ -245,7 +245,7 @@
                 if (string.IsNullOrWhiteSpace(_loggerSampleRequestFullPath))
                 {
                     // Get the current assembly location from the public property in the base class
-                    _loggerSampleRequestFullPath = Path.Combine(AssemblyDirectory.Replace(" ", "%"), _loggerSampleRequest);
+                    _loggerSampleRequestFullPath = Path.Combine(AssemblyDirectory, _loggerSampleRequest);
 
                     if (!File.Exists(_loggerSampleRequestFullPath))
                     {
@@ -271,7 +271,7 @@
                 if (string.IsNullOrWhiteSpace(_loggerSampleRequestJustInnerXmlOfBodyFullPath))
                 {
                     // Get the current assembly location from the public property in the base class
-                    _loggerSampleRequestJustInnerXmlOfBodyFullPath = Path.Combine(AssemblyDirectory.Replace(" ", "%"), _loggerSampleRequestJustInnerXmlOfBody);
+                    _loggerSampleRequestJustInnerXmlOfBodyFullPath = Path.Combine(AssemblyDirectory, _loggerSampleRequestJustInnerXmlOfBody);
 
                     if (!File.Exists(_loggerSampleRequestJustInnerXmlOfBodyFullPath))
                     {

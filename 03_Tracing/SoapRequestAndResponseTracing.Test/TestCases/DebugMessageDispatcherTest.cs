@@ -57,6 +57,8 @@
         [TestCategory("IntegrationTest")]
         [TestCategory("HappyPath")]
         [TestCategory("DebugMessageDispatcher")]
+        [DeploymentItem(@"TestData\DebugMessageDispatcher_01_SampleRequest_JustInnerXmlOfBody.txt", "TestData")]
+        [DeploymentItem(@"TestData\DebugMessageDispatcher_01_SampleRequest.txt", "TestData")]
         public void DebugMessageDispatcher_AfterReceiveRequest_Success()
         {
             // Arrange
@@ -106,6 +108,8 @@
         [TestCategory("IntegrationTest")]
         [TestCategory("HappyPath")]
         [TestCategory("DebugMessageDispatcher")]
+        [DeploymentItem(@"TestData\DebugMessageDispatcher_01_SampleRequest_JustInnerXmlOfBody.txt", "TestData")]
+        [DeploymentItem(@"TestData\DebugMessageDispatcher_01_SampleRequest.txt", "TestData")]
         public void DebugMessageDispatcher_StartLoggingTheRequest_Success()
         {
             // Arrange
@@ -152,6 +156,8 @@
         [TestCategory("IntegrationTest")]
         [TestCategory("HappyPath")]
         [TestCategory("DebugMessageDispatcher")]
+        [DeploymentItem(@"TestData\DebugMessageDispatcher_02_SampleReply_JustInnerXmlOfBody.txt", "TestData")]
+        [DeploymentItem(@"TestData\DebugMessageDispatcher_02_SampleReply.txt", "TestData")]
         public void DebugMessageDispatcher_BeforeSendReply_Success()
         {
             // Arrange
@@ -200,6 +206,8 @@
         [TestCategory("IntegrationTest")]
         [TestCategory("HappyPath")]
         [TestCategory("DebugMessageDispatcher")]
+        [DeploymentItem(@"TestData\DebugMessageDispatcher_02_SampleReply_JustInnerXmlOfBody.txt", "TestData")]
+        [DeploymentItem(@"TestData\DebugMessageDispatcher_02_SampleReply.txt", "TestData")]
         public void DebugMessageDispatcher_StartLoggingTheReply_Success()
         {
             // Arrange

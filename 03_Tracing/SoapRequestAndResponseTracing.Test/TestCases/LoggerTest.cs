@@ -54,6 +54,8 @@
         [TestCategory("IntegrationTest")]
         [TestCategory("HappyPath")]
         [TestCategory("Logger")]
+        [DeploymentItem(@"TestData\Logger_01_SampleRequest_JustInnerXmlOfBody.txt", "TestData")]
+        [DeploymentItem(@"TestData\Logger_01_SampleRequest.txt", "TestData")]
         public void Logger_Log_Success()
         {
             // Arrange
