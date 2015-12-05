@@ -2,6 +2,9 @@
 -- would need update the script to wrap in DB Transaction, include IfExists checks, and verify that running the script multiple times
 -- is fine (doesn't result in errors)
 
+-- Note: If you are running a build under TFS or some other build system, you will probably need to add permissions to the database
+-- for the user that is being used to run the build
+
 -- Database creation
 
 USE [master]
